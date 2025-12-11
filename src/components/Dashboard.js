@@ -11,7 +11,6 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const {logout} = useAuth()
-  const navigate = useNavigate();
 
   const currentUser = localStorage.getItem('geodnatech_user')
     ? JSON.parse(localStorage.getItem('geodnatech_user'))
