@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
-import { Home, BarChart2, Phone, Lightbulb, Wallet, DollarSign, UserPlus, Settings, Code, Menu, LogOut, MessageCircle } from 'lucide-react';
+import { Home, BarChart2, Phone, Lightbulb, Wallet, DollarSign, UserPlus, Settings, Code, Menu, MessageCircle } from 'lucide-react';
+import { useAuth } from './authContext';
+import { useNavigate } from 'react-router';
+
 
 import './Dashboard.css';
 
 const Dashboard = () => {
   const [activePage, setActivePage] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const {logout} = useAuth()
+  const navigate = useNavigate();
+
+  const currentUser = localStorage.getItem('geodnatech_user')
+    ? JSON.parse(localStorage.getItem('geodnatech_user'))
+    : null;
+
+   const {username} = currentUser
 
   const serviceCards = [
     { icon: '📱', title: 'Data card Printing', color: '#f59e42' },
@@ -37,6 +49,12 @@ const Dashboard = () => {
     { icon: '⬆️', title: 'Upgrade to Reseller ₦1000', color: '#e74c3c' }
   ];
 
+  const handleSubmit = (e)=>{
+    e.preventDefault();
+    logout()
+    // navigate('/')
+  }
+
   return (
     <div className="dashboard-container">
     
@@ -51,7 +69,7 @@ const Dashboard = () => {
 
         <div className="user-info">
           <div className="user-avatar">👤</div>
-          <div className="user-name">prius</div>
+          <div className="user-name">Hello,  {username}</div>
           <div className="user-balance">balance: ₦ 0.0</div>
         </div>
 
@@ -113,8 +131,7 @@ const Dashboard = () => {
 
       <div className="main-content">
         <div className="top-header">
-          <button className="logout-btn">
-            <LogOut size={18} />
+          <button className="logout-btn"  onClick={handleSubmit}>
             Logout
           </button>
         </div>
