@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Home, BarChart2, Phone, Lightbulb, Wallet, DollarSign, UserPlus, Settings, Code, Menu, MessageCircle } from 'lucide-react';
 import { useAuth } from './authContext';
-import { useNavigate } from 'react-router';
 
 
 import './Dashboard.css';
