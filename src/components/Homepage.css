@@ -69,6 +69,16 @@
   position: relative;
 }
 
+.nav-links p {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: color 0.3s;
+  position: relative;
+}
+
 .nav-links a:hover {
   color: #fef08a;
 }
@@ -109,6 +119,7 @@
   color: white;
   background: transparent;
   border: 2px solid white;
+  text-decoration: none;
 }
 
 .btn-outline:hover {
@@ -120,6 +131,7 @@
 .btn-primary {
   background: white;
   color: #9333ea;
+  text-decoration: none;
 }
 
 .btn-primary:hover {
