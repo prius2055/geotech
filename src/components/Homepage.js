@@ -99,7 +99,7 @@ const Homepage = () => {
           <ul className="nav-links desktop-only">
             {navLinks.map(link => (
               <li key={link}>
-                <a onClick={() => scrollToSection(link)}>{link}</a>
+                <p onClick={() => scrollToSection(link)}>{link}</p>
               </li>
             ))}
           </ul>
