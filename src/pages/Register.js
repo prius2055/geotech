@@ -73,9 +73,11 @@ const Register = () => {
 
     if(isLoading){
     return (
-      <div className="auth-container">
-        <div className="loading">Loading...</div>
-      </div>
+     
+        <div className="loading">
+          <p> Loading...</p>
+        </div>
+     
     )
   }
 

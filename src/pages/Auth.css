@@ -272,6 +272,9 @@
   cursor: not-allowed;
   transform: none;
 }
+.loading {
+  background: #ffff;
+}
 
 /* Focus visible for accessibility */
 .btn-submit:focus-visible,
