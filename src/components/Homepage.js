@@ -21,6 +21,13 @@ const Homepage = () => {
 
 
   const navLinks = ['HOME', 'ABOUT', 'FEATURES', 'PRICING', 'FAQS', 'CONTACT'];
+
+  const footerNavLinks = [
+  { label: "Developer's API", href: "#api" },
+  { label: "About Us", href: "#about" },
+  { label: "Services", href: "#about" },
+  { label: "F.A.Q's", href: "#faqs" },
+];
   
   const features = [
     { icon: '➜]', title: 'AUTOMATION', desc: 'Convert MTN, 9mobile, Airtel and Glo airtime to cash instantly. Airtime topup and data purchase are automated and get delivered to you almost instantly.' },
@@ -92,7 +99,7 @@ const Homepage = () => {
           <ul className="nav-links desktop-only">
             {navLinks.map(link => (
               <li key={link}>
-                <a onClick={() => scrollToSection(link)}>{link}</a>
+                <p onClick={() => scrollToSection(link)}>{link}</p>
               </li>
             ))}
           </ul>
@@ -121,7 +128,7 @@ const Homepage = () => {
           </div>
         
 
-          <img src={MobilePhone} alt="App Mockup image"></img>
+          <img src={MobilePhone} alt="A mobile phone"></img>
         </div>
         <svg class="hero-wave" viewBox="0 0 1440 320">
           <path fill="#ffffff" fill-opacity="1"
@@ -163,7 +170,7 @@ const Homepage = () => {
             </div>
           </div>
 
-          <img src={AboutPhone} alt="About us image" />
+          <img src={AboutPhone} alt="A mobile phone" />
         </div>
       </section>
 
@@ -216,7 +223,7 @@ const Homepage = () => {
             </div>
           ))}
            </div>
-            <img src={MobilePhone} alt="App Mockup image"></img>
+            <img src={MobilePhone} alt="App Mockup mobile phone"></img>
         </div>
         <svg class="features-wave-bottom" viewBox="0 0 1440 320">
           <path fill="#ffffff" fill-opacity="1"
@@ -489,15 +496,15 @@ const Homepage = () => {
             <h4>OUR SERVICES</h4>
             <ul className="footer-links">
               {['Buy Data', 'Buy Airtime', 'Bill Payment', 'Bulks SMS', 'Cable Subscription'].map((s, i) => (
-                <li key={i}><a href="#">{s}</a></li>
+                <li key={i}><p>{s}</p></li>
               ))}
             </ul>
           </div>
           <div className="footer-section">
             <h4>USEFUL LINK</h4>
             <ul className="footer-links">
-              {["Developer's API", 'About Us', 'Services', "F.A.Q's"].map((l, i) => (
-                <li key={i}><a href="#">{l}</a></li>
+              {footerNavLinks.map((s, i) => (
+                <li key={i}><a href={s.href}>{s.label}</a></li>
               ))}
             </ul>
           </div>

@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { NavLink, Link,useNavigate } from "react-router";
-import registeredUsers from '../data/users';
+import { Link,useNavigate } from "react-router";
 import { useAuth } from "../components/authContext";
 
 import './Auth.css';
 
 const Register = () => {
-  const [error, setError] = useState('');
+  // const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -37,12 +36,12 @@ const Register = () => {
 
 
        e.preventDefault();
-        setError('');
+        // setError('');
         setIsLoading(true);
     
         // Validation
         if (!formData.username || !formData.password) {
-          setError('Please fill in all fields');
+          // setError('Please fill in all fields');
           setIsLoading(false);
           return;
         }
@@ -67,10 +66,18 @@ const Register = () => {
           navigate('/dashboard');
         } else {
           // Login failed
-          setError('Invalid username or password');
+          // setError('Invalid username or password');
           setIsLoading(false);
         }
   };
+
+    if(isLoading){
+    return (
+      <div className="auth-container">
+        <div className="loading">Loading...</div>
+      </div>
+    )
+  }
 
   return (
     <div className="auth-container">
@@ -178,7 +185,7 @@ const Register = () => {
                 checked={formData.agreeTerms}
                 onChange={handleChange}
               />
-              <span>I Agree <a href="#" className="terms-link">the terms and conditions.</a></span>
+              <span>I Agree <p className="terms-link">the terms and conditions.</p></span>
             </label>
           </div>
 

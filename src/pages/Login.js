@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { NavLink, Link,useNavigate } from "react-router";
+import { Link,useNavigate } from "react-router";
 import {useAuth} from "../components/authContext";
 import registeredUsers from '../data/users';
 
@@ -9,7 +9,7 @@ import './Auth.css';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  // const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
    const { login } = useAuth();
@@ -20,7 +20,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError('');
+    // setError('');
     setIsLoading(true);
 
     // console.log(username, password);
@@ -28,7 +28,7 @@ const Login = () => {
 
     // Validation
     if (!username || !password) {
-      setError('Please fill in all fields');
+      // setError('Please fill in all fields');
       setIsLoading(false);
       return;
     }
@@ -63,10 +63,18 @@ const Login = () => {
       navigate('/dashboard');
     } else {
       // Login failed
-      setError('Invalid username or password');
+      // setError('Invalid username or password');
       setIsLoading(false);
     }
   };
+
+  if(isLoading){
+    return (
+      <div className="auth-container">
+        <div className="loading">Loading...</div>
+      </div>
+    )
+  }
 
   return (
     <div className="auth-container">
@@ -96,7 +104,7 @@ const Login = () => {
           </div>
 
           <div className="form-footer">
-            <a href="#" className="forgot-link">Forgot Password ?</a>
+            <p className="forgot-link">Forgot Password ?</p>
             <button onClick={handleSubmit} className="btn-submit">Sign In</button>
           </div>
 
