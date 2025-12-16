@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import MobilePhone from "../img/mobile_phone.png";
 import AboutPhone from "../img/about.png";
 import Mojeed from "../img/mojeed.jpg";
@@ -7,6 +7,8 @@ import IT from "../img/IT.jpg";
 
 import './Homepage.css';
 import { Link } from 'react-router';
+
+// import { supabase } from '../config/supabaseClient';
 
 const Homepage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -17,6 +19,13 @@ const Homepage = () => {
     document.getElementById(section.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
     setMobileMenuOpen(false);
   };
+
+
+//     useEffect(() => {
+//   supabase.auth.signOut().then(() => {
+//     console.log('Forced sign out');
+//   });
+// }, []);
 
 
 
@@ -90,6 +99,8 @@ const Homepage = () => {
     { q: 'Can Data Bought from you be Shared?', a: 'Only for Glo. MTN, 9mobile, and airtel data can\'t be shared.' }
   ];
 
+
+
   return (
     <div className="homepage">
       {/* Navigation */}
@@ -107,7 +118,7 @@ const Homepage = () => {
 
             
             <Link to="/login" className="btn btn-outline">LOGIN</Link>
-            <Link to="/register" className="btn btn-primary">REGISTER</Link>
+            <Link to="/signup" className="btn btn-primary">REGISTER</Link>
           </div>
           <button className="mobile-menu-btn mobile-only" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? '✕' : '☰'}
@@ -128,10 +139,10 @@ const Homepage = () => {
           </div>
         
 
-          <img src={MobilePhone} alt="A mobile phone"></img>
+          <img src={MobilePhone} alt="A mobile phone"/>
         </div>
-        <svg class="hero-wave" viewBox="0 0 1440 320">
-          <path fill="#ffffff" fill-opacity="1"
+        <svg className="hero-wave" viewBox="0 0 1440 320">
+          <path fill="#ffffff" fillOpacity="1"
           d="
           M0,160
           C90,80  180,240  270,160
@@ -176,8 +187,8 @@ const Homepage = () => {
 
       {/* Features Section */}
       <section id="features" className="features-section">
-        <svg class="features-wave-top" viewBox="0 0 1440 320">
-          <path fill="#ffffff" fill-opacity="1"
+        <svg className="features-wave-top" viewBox="0 0 1440 320">
+          <path fill="#ffffff" fillOpacity="1"
           d="
             M0,160
             C29,187 58,133 87,160
@@ -225,8 +236,8 @@ const Homepage = () => {
            </div>
             <img src={MobilePhone} alt="App Mockup mobile phone"></img>
         </div>
-        <svg class="features-wave-bottom" viewBox="0 0 1440 320">
-          <path fill="#ffffff" fill-opacity="1"
+        <svg className="features-wave-bottom" viewBox="0 0 1440 320">
+          <path fill="#ffffff" fillOpacity="1"
             d="
               M0,160
     C24,133 48,187 72,160
@@ -280,8 +291,8 @@ const Homepage = () => {
 
       {/* Stats Section */}
       <section className="stats-section">
-       <svg class="stats-wave-top" viewBox="0 0 1440 240">
-  <path fill="#ffffff" fill-opacity="1"
+       <svg className="stats-wave-top" viewBox="0 0 1440 240">
+  <path fill="#ffffff" fillOpacity="1"
     d="
       M0,100
       C29,118 58,82 87,100
@@ -316,8 +327,8 @@ const Homepage = () => {
             ))}
           </div>
         </div>
-        <svg class="stats-wave-bottom" viewBox="0 0 1440 240">
-  <path fill="#ffffff" fill-opacity="1"
+        <svg className="stats-wave-bottom" viewBox="0 0 1440 240">
+  <path fill="#ffffff" fillOpacity="1"
         d="
           M0,120
     C24,105 48,145 72,120

@@ -1,4 +1,4 @@
-import { Routes,Route } from 'react-router';
+import { Routes,Route, BrowserRouter } from 'react-router';
 import { AuthProvider } from './components/authContext';
 
 import Dashboard from './components/Dashboard';
@@ -11,6 +11,8 @@ import './App.css';
 
 function App() {
   return (
+
+    <BrowserRouter>
 <AuthProvider>
      <div className="App">
 
@@ -31,7 +33,7 @@ function App() {
     </div>
 </AuthProvider>
 
- 
+ </BrowserRouter>
   );
 }
 

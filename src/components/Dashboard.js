@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import { Home, BarChart2, Phone, Lightbulb, Wallet, DollarSign, UserPlus, Settings, Code, Menu, MessageCircle } from 'lucide-react';
 import { useAuth } from './authContext';
 
@@ -10,6 +10,7 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const {logout} = useAuth()
+
 
   const currentUser = localStorage.getItem('geodnatech_user')
     ? JSON.parse(localStorage.getItem('geodnatech_user'))
