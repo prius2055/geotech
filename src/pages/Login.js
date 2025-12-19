@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../components/authContext";
 import Loading from '../components/Loading';
@@ -11,7 +11,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login, user } = useAuth();
+  const { login} = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {

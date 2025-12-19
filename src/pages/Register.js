@@ -85,6 +85,7 @@ const Register = () => {
       password: formData.password
     });
 
+    console.log('Register result:', result);
 
 
     setIsLoading(false);
