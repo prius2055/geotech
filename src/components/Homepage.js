@@ -8,8 +8,6 @@ import IT from "../img/IT.jpg";
 import './Homepage.css';
 import { Link } from 'react-router';
 
-// import { supabase } from '../config/supabaseClient';
-
 const Homepage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('mtn');
@@ -19,13 +17,6 @@ const Homepage = () => {
     document.getElementById(section.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
     setMobileMenuOpen(false);
   };
-
-
-//     useEffect(() => {
-//   supabase.auth.signOut().then(() => {
-//     console.log('Forced sign out');
-//   });
-// }, []);
 
 
 
@@ -134,7 +125,7 @@ const Homepage = () => {
             <p>GEODNATECH is a company of GEODNATECH Nigeria Limited. We offer best deals when it comes to internet Data Plans, Airtime, Bills payment like GOTV, DSTV & STARTIMES.</p>
             <div className="hero-buttons">
                  <Link to="/login" className="btn btn-outline">LOGIN</Link>
-            <Link to="/register" className="btn btn-primary">REGISTER</Link>
+            <Link to="/signup" className="btn btn-primary">REGISTER</Link>
             </div>
           </div>
         
