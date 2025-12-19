@@ -1,4 +1,5 @@
 import React, { useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Home, BarChart2, Phone, Lightbulb, Wallet, DollarSign, UserPlus, Settings, Code, Menu, MessageCircle } from 'lucide-react';
 import { useAuth } from './authContext';
 
@@ -9,14 +10,13 @@ const Dashboard = () => {
   const [activePage, setActivePage] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const {logout} = useAuth()
+  const navigate = useNavigate();
 
+  const {user, logout} = useAuth();
 
-  const currentUser = localStorage.getItem('geodnatech_user')
-    ? JSON.parse(localStorage.getItem('geodnatech_user'))
-    : null;
+  const {user_metadata} = user || {};
 
-   const {username} = currentUser
+  const {username} = user_metadata || {};
 
   const serviceCards = [
     { icon: '📱', title: 'Data card Printing', color: '#f59e42' },
@@ -47,12 +47,19 @@ const Dashboard = () => {
     { icon: '💳', title: 'Wallet summary', color: '#f59e42' },
     { icon: '⬆️', title: 'Upgrade to Reseller ₦1000', color: '#e74c3c' }
   ];
+  
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = (e)=>{
-    e.preventDefault();
-    logout()
-    // navigate('/')
+  const result = await logout();
+
+  console.log('Logout result:', result);
+
+  if (result.success) {
+     navigate('/', { replace: true });
   }
+};
+
 
   return (
     <div className="dashboard-container">
