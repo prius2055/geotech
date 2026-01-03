@@ -36,46 +36,46 @@ export const WalletProvider = ({ children }) => {
 //     }
 //   };
 
-    useEffect(() => {
-      const fetchBalance = async () => {
-        try {
-          const token = localStorage.getItem("token");
+    // useEffect(() => {
+    //   const fetchBalance = async () => {
+    //     try {
+    //       const token = localStorage.getItem("token");
   
-          if (!token) {
-            setError("User not authenticated");
-            setLoading(false);
-            return;
-          }
+    //       if (!token) {
+    //         setError("User not authenticated");
+    //         setLoading(false);
+    //         return;
+    //       }
   
-          const response = await fetch(
-            "http://localhost:5000/api/v1/wallet",
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
+    //       const response = await fetch(
+    //         "http://localhost:5000/api/v1/wallet",
+    //         {
+    //           method: "GET",
+    //           headers: {
+    //             Authorization: `Bearer ${token}`,
+    //             "Content-Type": "application/json",
+    //           },
+    //         }
+    //       );
   
-          const data = await response.json();
+    //       const data = await response.json();
   
-          const {data: {wallet}} = data;
+    //       const {data: {wallet}} = data;
   
-          if (!response.ok) {
-            throw new Error(data.message || "Failed to fetch balance");
-          }
+    //       if (!response.ok) {
+    //         throw new Error(data.message || "Failed to fetch balance");
+    //       }
   
-          setBalance(wallet.balance);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      };
+    //       setBalance(wallet.balance);
+    //     } catch (err) {
+    //       setError(err.message);
+    //     } finally {
+    //       setLoading(false);
+    //     }
+    //   };
   
-      fetchBalance();
-    }, []);
+    //   fetchBalance();
+    // }, []);
 
 ////////////////////
 //     useEffect(() => {
@@ -193,7 +193,8 @@ const buyData = async (payload) => {
 
   try {
     const res = await fetch(
-      'http://localhost:5000/api/v1/vtu/buy-data',
+      // 'http://localhost:5000/api/v1/vtu/buy-data',
+      'https://vtu-backend-wjn6.onrender.com/api/v1/vtu/buy-data',
       {
         method: 'POST',
         headers: {
@@ -247,7 +248,8 @@ const buyAirtime = async (payload) => {
 
   try {
     const res = await fetch(
-      'http://localhost:5000/api/v1/vtu/buy-airtime',
+      // 'http://localhost:5000/api/v1/vtu/buy-airtime',
+      'https://vtu-backend-wjn6.onrender.com/api/v1/vtu/buy-airtime',
       {
         method: 'POST',
         headers: {
@@ -301,7 +303,8 @@ const meterRecharge = async (payload) => {
 
   try {
     const res = await fetch(
-      'http://localhost:5000/api/v1/vtu/recharge-meter',
+      // 'http://localhost:5000/api/v1/vtu/recharge-meter',
+      'https://vtu-backend-wjn6.onrender.com/api/v1/vtu/recharge-meter',
       {
         method: 'POST',
         headers: {
