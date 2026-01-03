@@ -1,0 +1,370 @@
+.buy-data-container {
+ display: flex;
+}
+
+.buy-data-content{
+ display: flex;
+ flex-direction: column;
+  margin-left: 280px;
+  width: calc(100% - 280px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Popup Container */
+.popup-container {
+  background: white;
+  border-radius: 16px;
+  max-width: 1200px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease-out;
+  padding: 40px;
+  margin: 20px auto;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Title */
+.popup-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 30px 0;
+  text-align: center;
+}
+
+/* Form Layout */
+.popup-form {
+  width: 100%;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.form-column {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Form Group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.required {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  background: white;
+  color: #1f2937;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236B7280' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+.form-hint {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 6px;
+  display: block;
+}
+
+/* Checkbox Group */
+.checkbox-group {
+  padding: 12px 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #374151;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  margin: 0;
+}
+
+/* Error Message */
+.form-error {
+  padding: 12px 16px;
+  background: #fee2e2;
+  color: #dc2626;
+  border-radius: 10px;
+  font-size: 14px;
+  border: 1px solid #fecaca;
+  animation: shake 0.3s ease-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Buy Now Button */
+.btn-buy-now {
+  width: 100%;
+  padding: 16px 24px;
+  background: #1e40af;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-buy-now:hover {
+  background: #1e3a8a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.4);
+}
+
+.btn-buy-now:active {
+  transform: translateY(0);
+}
+
+/* Read-only Input Styling */
+.readonly-input {
+  background: #f9fafb !important;
+  cursor: not-allowed;
+  color: #1f2937;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.form-hint.text-success {
+  color: #10b981;
+  font-weight: 500;
+}
+
+.form-hint.text-warning {
+  color: #f59e0b;
+  font-weight: 500;
+}
+
+.form-group select:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn-buy-now:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.7;
+}
+
+/* Info Column */
+.info-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 16px;
+}
+
+.info-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-card {
+  padding: 14px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+  transition: transform 0.2s ease;
+}
+
+.info-card:hover {
+  transform: translateX(5px);
+}
+
+.info-card strong {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+/* Network Colors */
+.info-card.mtn {
+  background: #fff9e6;
+  color: #7c5c00;
+  border-left: 4px solid #fbbf24;
+}
+
+.info-card.nine-mobile {
+  background: #e6f3ff;
+  color: #004a7c;
+  border-left: 4px solid #3b82f6;
+}
+
+.info-card.airtel {
+  background: #ffe6e6;
+  color: #7c0000;
+  border-left: 4px solid #ef4444;
+}
+
+.info-card.glo {
+  background: #e6ffe6;
+  color: #006b00;
+  border-left: 4px solid #10b981;
+}
+
+/* Scrollbar Styling */
+.popup-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.popup-container::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 10px;
+}
+
+.popup-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+.popup-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .info-column {
+    order: -1; /* Show info first on mobile */
+  }
+}
+
+@media (max-width: 768px) {
+  .popup-container {
+    padding: 30px 20px;
+    max-height: 95vh;
+  }
+
+  .popup-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .popup-close {
+    top: 15px;
+    right: 15px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .form-column {
+    gap: 16px;
+  }
+
+  .info-cards {
+    gap: 10px;
+  }
+
+  .info-card {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .popup-overlay {
+    padding: 10px;
+  }
+
+  .popup-container {
+    padding: 25px 15px;
+    border-radius: 12px;
+  }
+
+  .popup-title {
+    font-size: 20px;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .btn-buy-now {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+}

@@ -1,7 +1,6 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../components/authContext";
-import Loading from '../components/Loading';
 
 import './Auth.css';
 
@@ -11,8 +10,16 @@ const Login = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login} = useAuth();
+  const { login, user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirect if already logged in
+    if (user) {
+      console.log('✅ User already logged in, redirecting to dashboard...');
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,20 +41,21 @@ const Login = () => {
       return;
     }
 
-    try {
-      const result = await login(email.trim(), password.trim());
+    console.log('🔵 Attempting login...');
 
-      if (result.success) {
-        setError(false)
-        setTimeout(() => {
-          navigate('/dashboard');
-        }, 2000);
-      } else {
-        setError(`${result.message}. Please check your connection and try again` || 'Invalid email or password');
-        setIsLoading(false);
-      }
-    } catch (error) {
-      setError(error.message || 'Login failed. Please check your network and try again');
+    // Call backend login
+    const result = await login(email.trim(), password.trim());
+
+    console.log('📊 Login result:', result);
+
+    if (result.success) {
+      console.log('✅ Login successful, redirecting to dashboard...');
+      // Navigation will happen via useEffect when user state updates
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 2000);
+    } else {
+      setError(result.message || 'Invalid email or password');
       setIsLoading(false);
     }
   };
@@ -55,7 +63,7 @@ const Login = () => {
   if (isLoading) {
     return (
       <div className="loading">
-       <Loading message="Signing In..." fullScreen={true} size="large" />
+        <p>Signing you in...</p>
       </div>
     );
   }
@@ -110,7 +118,7 @@ const Login = () => {
             <button 
               onClick={handleSubmit} 
               className="btn-submit"
-              disabled={isLoading || !email || !password }
+              disabled={isLoading}
             >
               {isLoading ? 'Signing In...' : 'Sign In'}
             </button>

@@ -1,22 +1,27 @@
-import React, { useState} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Home, BarChart2, Phone, Lightbulb, Wallet, DollarSign, UserPlus, Settings, Code, Menu, MessageCircle } from 'lucide-react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import {MessageCircle} from 'lucide-react';
 import { useAuth } from './authContext';
+import { useWallet } from './walletContext';
 
 
+import SideBar from './SideBar';
+import Header from './Header';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const [activePage, setActivePage] = useState('dashboard');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const navigate = useNavigate();
+  const {user} = useAuth();
+  const {balance} = useWallet();
 
-  const {user, logout} = useAuth();
+  const {username} = user|| 'Guest';
 
-  const {user_metadata} = user || {};
-
-  const {username} = user_metadata || {};
+ const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: 'NGN'
+    }).format(amount);
+  };
 
   const serviceCards = [
     { icon: '📱', title: 'Data card Printing', color: '#f59e42' },
@@ -32,7 +37,7 @@ const Dashboard = () => {
   ];
 
   const balanceCards = [
-    { icon: '💳', title: 'Wallet Balance', amount: '₦ 0.0', color: '#3b9fd8' },
+    { icon: '💳', title: 'Wallet Balance', amount: `${balance !== null ? formatCurrency(balance): 'Loading...'}`, color: '#3b9fd8' },
     { icon: '📊', title: 'MTN SME DATA BALANCE', amount: '0.0 GB', color: '#3b9fd8' },
     { icon: '📊', title: 'AIRTEL CG DATA BALANCE', amount: '0.0 GB', color: '#3b9fd8' },
     { icon: '💰', title: 'Referral Bonus', amount: '₦ 0.0', color: '#3b9fd8' },
@@ -47,25 +52,13 @@ const Dashboard = () => {
     { icon: '💳', title: 'Wallet summary', color: '#f59e42' },
     { icon: '⬆️', title: 'Upgrade to Reseller ₦1000', color: '#e74c3c' }
   ];
-  
- const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  const result = await logout();
-
-  console.log('Logout result:', result);
-
-  if (result.success) {
-     navigate('/', { replace: true });
-  }
-};
 
 
   return (
     <div className="dashboard-container">
-    
+    <SideBar />
 
-      <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+      {/* <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <h2>Welcome</h2>
           <button className="menu-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
@@ -76,7 +69,7 @@ const Dashboard = () => {
         <div className="user-info">
           <div className="user-avatar">👤</div>
           <div className="user-name">Hello,  {username}</div>
-          <div className="user-balance">balance: ₦ 0.0</div>
+          <div className="user-balance">balance: {balance !== null ? formatCurrency(balance): 'Loading...'}</div>
         </div>
 
         <nav className="nav-menu">
@@ -84,7 +77,7 @@ const Dashboard = () => {
             <Home size={20} />
             <span>Dashboard</span>
           </div>
-          <div className="nav-item">
+          <div className="nav-item" onClick={openPopup}>
             <BarChart2 size={20} />
             <span>Buy Data</span>
           </div>
@@ -96,17 +89,37 @@ const Dashboard = () => {
             <BarChart2 size={20} />
             <span>Buy BULK AIRTEL CG Data</span>
           </div>
-          <div className="nav-item">
+          <div className="nav-item" onClick={openBuyAirtimePopup}>
             <Phone size={20} />
             <span>Buy Airtime</span>
           </div>
-          <div className="nav-item">
+
+          <div className='utilities'>
+             <div className="nav-item" onClick={() => setShowUtilities(prev => !prev)}>
             <Lightbulb size={20} />
             <span>Utilities Payment</span>
+            <ChevronDown size={20} className={`nav-item-utils ${showUtilities ? 'open' : ''}`}/>
+               </div>
+            {showUtilities && (
+            <div className="nav-children">
+              <div className="nav-child" onClick={openEnergyRechargePopup}>
+                <Zap size={18} />
+                <span>Energy Meter Recharge</span>
+                </div>
+                <div className="nav-child">
+                  <Monitor size={18} />
+                  <span>Cable Subscription</span>
+                  </div>
+                  </div>
+                )}
+
+
+       
           </div>
+         
           <div className="nav-item">
             <Wallet size={20} />
-            <span>Fund Wallet</span>
+            <span onClick={handleFundWallet}>Fund Wallet</span>
           </div>
           <div className="nav-item">
             <DollarSign size={20} />
@@ -133,16 +146,16 @@ const Dashboard = () => {
         <div className="sidebar-footer">
           Version 7.6
         </div>
-      </div>
+      </div> */}
 
       <div className="main-content">
-        <div className="top-header">
+        {/* <div className="top-header">
           <button className="logout-btn"  onClick={handleSubmit}>
             Logout
           </button>
-        </div>
-
-        <button className="fund-wallet-btn">Fund Wallet</button>
+        </div> */}
+<Header/>
+        <Link to='/funding' className="fund-wallet-btn" >Fund Wallet</Link>
 
         <div className="content">
           <div className="announcement-banner">
@@ -152,7 +165,7 @@ const Dashboard = () => {
           </div>
 
           <div className="greeting-section">
-            <h2>Good morning, <strong>prius</strong></h2>
+            <h2>Good morning, <strong>{username}</strong></h2>
             <div className="package-title">Package : Smart Earner</div>
             <div className="google-play-btn">
               <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" />

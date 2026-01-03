@@ -1,4 +1,7 @@
-import React, { useState} from 'react';
+import React, { useState,useEffect} from 'react';
+import { Link } from 'react-router';
+import { useWallet } from './walletContext';
+
 import MobilePhone from "../img/mobile_phone.png";
 import AboutPhone from "../img/about.png";
 import Mojeed from "../img/mojeed.jpg";
@@ -6,7 +9,6 @@ import Tenny from "../img/tenny.jpg";
 import IT from "../img/IT.jpg";
 
 import './Homepage.css';
-import { Link } from 'react-router';
 
 const Homepage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -59,28 +61,28 @@ const Homepage = () => {
     { name: 'Tenny', role: 'Web Developer', avatar:Tenny, text: '"Amazing!...i recommend to all data resellers...kudos."' }
   ];
 
-  const pricingData = {
-    mtn: [
-      { size: '500MB', price: '₦350', duration: 'daily' },
-      { size: '1.0GB', price: '₦510', duration: 'daily' },
-      { size: '2.0GB', price: '₦1100', duration: '1 month' }
-    ],
-    glo: [
-      { size: '1.0GB', price: '₦415', duration: '1 month' },
-      { size: '2.0GB', price: '₦830', duration: '1 month' },
-      { size: '3.0GB', price: '₦1245', duration: '1 month' }
-    ],
-    airtel: [
-      { size: '1.0GB', price: '₦1250', duration: '1 month' },
-      { size: '2.0GB', price: '₦1490', duration: '1 month' },
-      { size: '3.0GB', price: '₦1980', duration: '1 month' }
-    ],
-    '9mobile': [
-      { size: '1.0GB', price: '₦380', duration: '1 month' },
-      { size: '2.0GB', price: '₦730', duration: '1 month' },
-      { size: '3.0GB', price: '₦1100', duration: '1 month' }
-    ]
-  };
+  // const pricingData = {
+  //   mtn: [
+  //     { size: '500MB', price: '₦350', duration: 'daily' },
+  //     { size: '1.0GB', price: '₦510', duration: 'daily' },
+  //     { size: '2.0GB', price: '₦1100', duration: '1 month' }
+  //   ],
+  //   glo: [
+  //     { size: '1.0GB', price: '₦415', duration: '1 month' },
+  //     { size: '2.0GB', price: '₦830', duration: '1 month' },
+  //     { size: '3.0GB', price: '₦1245', duration: '1 month' }
+  //   ],
+  //   airtel: [
+  //     { size: '1.0GB', price: '₦1250', duration: '1 month' },
+  //     { size: '2.0GB', price: '₦1490', duration: '1 month' },
+  //     { size: '3.0GB', price: '₦1980', duration: '1 month' }
+  //   ],
+  //   '9mobile': [
+  //     { size: '1.0GB', price: '₦380', duration: '1 month' },
+  //     { size: '2.0GB', price: '₦730', duration: '1 month' },
+  //     { size: '3.0GB', price: '₦1100', duration: '1 month' }
+  //   ]
+  // };
 
   const faqs = [
     { q: 'How To Buy Data?', a: '1. Log in to your account\n2. Register if needed\n3. Fund your account\n4. Select payment method' },
@@ -91,6 +93,24 @@ const Homepage = () => {
   ];
 
 
+const{dataPlans} = useWallet()
+
+ // Step 1: Group plans by service_name
+const allPlans = Object.values(dataPlans) // { CORPORATE, SME, ... }
+  .flatMap(network =>
+    Object.values(network).flat()
+  );
+
+const groupedByNetwork = allPlans?.reduce((acc, plan) => {
+  const network = plan.plan_network;
+
+  if (!acc[network]) {
+    acc[network] = [];
+  }
+
+  acc[network].push(plan);
+  return acc;
+}, {});
 
   return (
     <div className="homepage">
@@ -385,14 +405,14 @@ const Homepage = () => {
 
       {/* Pricing */}
       <section id="pricing" className="pricing-section">
-        <div className="section-header">
+         <div className="section-header">
           <h2 className="section-title">EXCLUSIVE DATA PRICES</h2>
            <div className="title-underline big"></div>
           <div className="title-underline small"></div>
           <p className="section-description">Our Affordable Data Prices</p>
         </div>
-        <div className="pricing-tabs">
-          {['mtn', 'glo', 'airtel', '9mobile'].map(network => (
+       {/* <div className="pricing-tabs">
+          {['MTN', 'GLO', 'AIRTEL', '9MOBILE'].map(network => (
             <button
               key={network}
               onClick={() => setActiveTab(network)}
@@ -403,7 +423,7 @@ const Homepage = () => {
           ))}
         </div>
         <div className="container pricing-grid">
-          {pricingData[activeTab].map((p, i) => (
+          {groupedByNetwork[activeTab].map((p, i) => (
             <div key={i} className="pricing-card">
               <div className="pricing-header gradient-bg">
                 <div className="pricing-size">{p.size}</div>
@@ -418,7 +438,51 @@ const Homepage = () => {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
+
+
+         <div className="data-plans-container">
+      {Object.entries(groupedByNetwork).map(([serviceName, plans]) => (
+        
+          <table key={serviceName} className="data-plans-table">
+            
+            <thead>
+              <tr>
+                <th  colSpan="4">{serviceName} Data Plans</th>
+              
+              </tr>
+              <tr>
+                <th>Data Plan</th>
+                <th>Price (₦)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {plans.map((plan,i) => (
+                <tr key={plan.dataplan_id+i}>
+                  <td>{plan.plan} - {plan.month_validate}</td>
+                  <td>
+                    {plan.plan_amount <= 500
+                    ? Math.ceil(plan.plan_amount * 1.1)
+                    : plan.plan_amount < 1000
+                    ? Math.ceil(plan.plan_amount * 1.1)
+                    : plan.plan_amount <= 3000
+                    ? Math.ceil(plan.plan_amount * 1.08)
+                    : plan.plan_amount <= 5000
+                    ? Math.ceil(plan.plan_amount * 1.05)
+                    : plan.plan_amount <= 12000
+                    ? Math.ceil(plan.plan_amount * 1.06)
+                    : Math.ceil(plan.plan_amount * 1.03)}
+                  </td>
+
+                </tr>
+              ))}
+            </tbody>
+          </table>
+       
+      ))}
+    </div>
+ <Link to="/login" className="btn btn-primary">PURCHASE</Link>
+
       </section>
 
       {/* FAQs */}

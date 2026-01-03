@@ -17,7 +17,7 @@
         }
 
         .sidebar {
-          width: 250px;
+          width: 270px;
           background: #2d3748;
           color: white;
           display: flex;
@@ -107,6 +107,44 @@
           height: 20px;
         }
 
+        .nav-item-utils {
+          margin-left: auto;
+          width: 16px;
+          height: 25px;
+        }
+
+        .utilities{
+          display: flex;
+          flex-direction: column;
+        }
+
+        .nav-children {
+          margin-left: 32px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        
+        .nav-child {
+          display: flex;
+          align-items: center;
+          gap: 10px;padding: 6px 0;
+          padding: 6px 0;
+          cursor: pointer;
+          font-size: 14px;
+          color: #a0aec0;
+        }
+        
+        .nav-child:hover {
+          background: rgba(255,255,255,0.05);
+          color: white;
+        }
+
+        .nav-item-utils.open {
+          transform: rotate(180deg);
+          transition: transform 0.2s ease;
+        }
+
         .sidebar-footer {
           padding: 20px;
           border-top: 1px solid rgba(255,255,255,0.1);
@@ -116,7 +154,7 @@
 
         .main-content {
           flex: 1;
-          margin-left: 250px;
+          margin-left: 280px;
           display: flex;
           flex-direction: column;
         }

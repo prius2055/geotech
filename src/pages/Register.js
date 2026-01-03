@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../components/authContext";
-import Loading from '../components/Loading';
 
 import './Auth.css';
 
@@ -38,6 +37,9 @@ const Register = () => {
     setError('');
     setSuccess('');
     setIsLoading(true);
+
+    console.log('=== REGISTRATION STARTED ===');
+    console.log('Form Data:', formData);
 
     // Validation
     if (!formData.fullName || !formData.username || !formData.email || 
@@ -85,15 +87,20 @@ const Register = () => {
       password: formData.password
     });
 
-    console.log('Register result:', result);
-
+    console.log('=== REGISTRATION RESULT ===');
+    console.log('Result:', result);
 
     setIsLoading(false);
 
     if (result.success) {
       setSuccess(result.message);
-        navigate('/confirmation');
+      console.log('✅ Registration successful!');
+      // Redirect to login after 2 seconds
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } else {
+      console.error('❌ Registration failed:', result.message);
       setError(result.message || 'Registration failed. Please try again.');
     }
   };
@@ -101,7 +108,7 @@ const Register = () => {
   if (isLoading) {
     return (
       <div className="loading">
-      <Loading message="Creating your account..." fullScreen={true} size="large" />
+        <p>Creating your account...</p>
       </div>
     );
   }
@@ -251,9 +258,7 @@ const Register = () => {
           <button 
             onClick={handleSubmit} 
             className="btn-submit btn-block"
-            disabled={isLoading || !formData.fullName || !formData.username || !formData.email || 
-                      !formData.phone || !formData.address || !formData.password ||
-                      !formData.agreeTerms}
+            disabled={isLoading}
           >
             {isLoading ? 'Creating Account...' : 'Sign Up'}
           </button>

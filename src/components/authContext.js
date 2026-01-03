@@ -1,107 +1,132 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { supabase } from '../config/supabaseClient';
-
+import { useNavigate } from 'react-router-dom';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+
+  const navigate = useNavigate();
+
   useEffect(() => {
-
-    const init = async () => {
-      setLoading(true);
-      const { data: { session } } = await supabase.auth.getSession();
-  
-      setUser(session?.user ?? null);
-      setLoading(false);
-    };
-
-    init();
-
-    const { data: { subscription } } =
-      supabase.auth.onAuthStateChange((_event, session) => {
-        setUser(session?.user ?? null);
-        setLoading(false);
-      });
-    return () => subscription.unsubscribe();
+    // Check if user is logged in on mount
+    checkAuth();
   }, []);
 
-  
-  const login = async (email, password) => {
-    try {
-      console.log('🔵 Attempting login for:', email);
-      
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
-      });
-
-
-      if (error) {
-        return { success: false, message: error.message };
-      }
-
-      return { success: true, data: data.user };
-      
-    } catch (error) {
-      return { success: false, message: error.message };
+  const checkAuth = async () => {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      setLoading(false);
+      return;
     }
-  };
 
-
-
-  const register = async (userData) => {
     try {
-      console.log('🔵 Starting registration for:', userData.email);
-
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: userData.email,
-        password: userData.password,
-        options: {
-          data: {
-            username: userData.username,
-            full_name: userData.fullName,
-            phone: userData.phone,
-            address: userData.address,
-            referral: userData.referral || null,
-          }
+      console.log('🔵 Checking authentication...');
+      
+      const response = await fetch(`https://vtu-backend-wjn6.onrender.com/api/v1/verify`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
         }
       });
 
-
-      if (authError) throw authError;
-
-      if (!authData.user) {
-        throw new Error('No user returned from signup');
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+      } else {
+        console.log('⚠️ Token invalid, clearing...');
+        localStorage.removeItem('token');
+        setUser(null);
       }
-
-      return { 
-        success: true, 
-        message: 'Registration successful! Please check your email to verify your account.' 
-      };
     } catch (error) {
-      if (error.message.includes('unique_username')) {
-        return { success: false, message: 'Username already exists' };
-      }
-      return { success: false, message: error.message };
-    }
-  };
-
-  const logout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      
+      console.error('❌ Auth check failed:', error);
+      localStorage.removeItem('token');
       setUser(null);
-      return { success: true };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const register = async (userData) => {
+    try {
+      console.log('🔵 Registering user...');
+      
+      const response = await fetch(`https://vtu-backend-wjn6.onrender.com/api/v1/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === 'success') {
+        console.log('✅ Registration successful');
+        localStorage.setItem('token', data.token);
+        setUser(data.user);
+        return { success: true, message: 'Registration successful!' };
+      } else {
+        console.error('❌ Registration failed:', data.message);
+        return { success: false, message: data.message || 'Registration failed' };
+      }
     } catch (error) {
+      console.error('❌ Registration error:', error);
       return { success: false, message: error.message };
     }
   };
+
+  const login = async (email, password) => {
+    try {
+      console.log('🔵 Logging in...');
+      
+      const response = await fetch(`https://vtu-backend-wjn6.onrender.com/api/v1/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === 'success') {
+        console.log('✅ Login successful');
+        localStorage.setItem('token', data.token);
+        setUser(data.user);
+        return { success: true, user: data.user };
+      } else {
+        console.error('❌ Login failed:', data.message);
+        return { success: false, message: data.message || 'Login failed' };
+      }
+    } catch (error) {
+      console.error('❌ Login error:', error);
+      return { success: false, message: error.message };
+    }
+  };
+
+ const logout = () => {
+  console.log('🔵 Logging out...');
+
+  try {
+    // Clear auth storage
+    localStorage.removeItem('token');
+
+    // Reset auth state
+    setUser(null);
+
+    console.log('✅ Logout successful');
+  } catch (error) {
+    console.error('❌ Logout error:', error);
+  } finally {
+    // Always redirect
+    navigate('/', { replace: true });
+  }
+};
 
   const isAuthenticated = () => {
-   return !!user;
+    return !!user && !!localStorage.getItem('token');
   };
 
   return (
@@ -110,8 +135,8 @@ export const AuthProvider = ({ children }) => {
       login, 
       register, 
       logout, 
-      isAuthenticated,
-      loading
+      isAuthenticated, 
+      loading 
     }}>
       {children}
     </AuthContext.Provider>
