@@ -137,7 +137,7 @@ const fundWallet = async (amount) => {
 
   } catch (error) {
     console.error('Fund wallet error:', error.message);
-    // alert(error.message);
+  setError(error.message);
   }
 };
 
@@ -152,7 +152,8 @@ const fundWallet = async (amount) => {
 
   try {
     const res = await fetch(
-      `http://localhost:5000/api/v1/wallet/verify?reference=${reference}`,{
+      // `http://localhost:5000/api/v1/wallet/verify?reference=${reference}`,{
+      `https://vtu-backend-wjn6.onrender.com/api/v1/wallet/verify?reference=${reference}`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
