@@ -1,4 +1,4 @@
-import { createContext, useContext, useState,useEffect,useRef } from 'react';
+import { createContext, useContext, useState,useRef } from 'react';
 
 const WalletContext = createContext();
 
@@ -11,108 +11,38 @@ export const WalletProvider = ({ children }) => {
 
     const verifyingRef = useRef(false);
 
-  const token = localStorage.getItem('token');
 
-//   const request = async (url, body = null) => {
-//     setLoading(true);
-//     setError(null);
-
-//     try {
-//       const res = await fetch(url, {
-//         method: body ? 'POST' : 'GET',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: `Bearer ${token}`,
-//         },
-//         body: body ? JSON.stringify(body) : null,
-//       });
-
-//       const data = await res.json();
-//       if (!res.ok) throw new Error(data.message);
-
-//       return data;
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-    // useEffect(() => {
-    //   const fetchBalance = async () => {
-    //     try {
-    //       const token = localStorage.getItem("token");
-  
-    //       if (!token) {
-    //         setError("User not authenticated");
-    //         setLoading(false);
-    //         return;
-    //       }
-  
-    //       const response = await fetch(
-    //         "http://localhost:5000/api/v1/wallet",
-    //         {
-    //           method: "GET",
-    //           headers: {
-    //             Authorization: `Bearer ${token}`,
-    //             "Content-Type": "application/json",
-    //           },
-    //         }
-    //       );
-  
-    //       const data = await response.json();
-  
-    //       const {data: {wallet}} = data;
-  
-    //       if (!response.ok) {
-    //         throw new Error(data.message || "Failed to fetch balance");
-    //       }
-  
-    //       setBalance(wallet.balance);
-    //     } catch (err) {
-    //       setError(err.message);
-    //     } finally {
-    //       setLoading(false);
-    //     }
-    //   };
-  
-    //   fetchBalance();
-    // }, []);
+   const token = localStorage.getItem('token') || [];
 
 ////////////////////
-//     useEffect(() => {
-//   const fetchDataPlans = async () => {
-//     try {
-//       const response = await fetch('http://localhost:5000/api/v1/vtu/data-plans');
-//       const data = await response.json();
-
-//       setDataPlans(data.data);
-//     } catch (error) {
-//       console.error('Error fetching data plans:', error);
-//     }
-//   };
-
-//   fetchDataPlans();
-// }, []);
 
 
+  const fetchDataPlans = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      // const response = await fetch('http://localhost:5000/api/v1/vtu/data-plans', {
+      const response = await fetch('https://vtu-backend-wjn6.onrender.com/api/v1/vtu/data-plans', {
+        method: 'GET',
+         headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+      const data = await response.json();
+      console.log('Fetched data plans:', data);
 
+      if(data.status === 'success') {
+        setLoading(false);
+        setDataPlans(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching data plans:', error);
+      setError('Failed to fetch data plans');
+    }
+  };
 
-// const refreshWallet = async () => {
-//     const data = await request('http://localhost:5000/api/v1/wallet');
-//     setBalance(data.wallet.balance);
-//     setTransactions(data.transactions);
-//   };
-
-//   const fundWallet = async (amount) => {
-//     const data = await request(
-//       'http://localhost:5000/api/v1/wallet/fund',
-//       { amount }
-//     );
-
-//     setBalance(data.wallet.balance);
-//     setTransactions((prev) => [data.transaction, ...prev]);
-//   };
-
-const fundWallet = async (amount) => {
+    const fundWallet = async (amount) => {
   try {
     const token = localStorage.getItem('token');
 
@@ -139,10 +69,10 @@ const fundWallet = async (amount) => {
     console.error('Fund wallet error:', error.message);
   setError(error.message);
   }
-};
+    };
 
 
- const verifyWalletFunding = async (reference) => {
+    const verifyWalletFunding = async (reference) => {
 
        if (verifyingRef.current) return false; // 🚫 stop duplicates
     verifyingRef.current = true;
@@ -358,6 +288,7 @@ const meterRecharge = async (payload) => {
         loading,
         error,
         dataPlans,
+        fetchDataPlans,
         fundWallet,
         verifyWalletFunding,
         buyData,
