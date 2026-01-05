@@ -52,6 +52,7 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log('🔵 Registering user...');
       
+      // const response = await fetch(`http://localhost:5000/api/v1/register`, {
       const response = await fetch(`https://vtu-backend-wjn6.onrender.com/api/v1/register`, {
         method: 'POST',
         headers: {
@@ -81,7 +82,8 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log('🔵 Logging in...');
       
-      const response = await fetch(`https://vtu-backend-wjn6.onrender.com/api/v1/login`, {
+      const response = await fetch(`http://localhost:5000/api/v1/login`, {
+      // const response = await fetch(`https://vtu-backend-wjn6.onrender.com/api/v1/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
