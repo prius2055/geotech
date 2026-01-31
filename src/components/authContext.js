@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
 
-// const BASE_URL = `http://localhost:5000/api/v1`,
+// const BASE_URL = `http://localhost:5000/api/v1`;
 
 const BASE_URL = `https://vtu-backend-wjn6.onrender.com/api/v1`;
 

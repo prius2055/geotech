@@ -55,7 +55,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchDataPlans();
-  }, [fetchDataPlans]);
+  }, []);
 
   const handleUpgradeClick = () => {
     setShowUpgradeModal(true);
