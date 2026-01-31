@@ -143,7 +143,7 @@ const SideBar = () => {
             <div className="admin-nav-links">
               <NavLink to="/admin/data" className="nav-item">
                 <Signal size={20} />
-                <span>Data Plans</span>
+                <span>Edit Price</span>
               </NavLink>
 
               <NavLink to="/admin/transactions" className="nav-item">
