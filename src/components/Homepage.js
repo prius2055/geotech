@@ -12,7 +12,6 @@ import "./Homepage.css";
 
 const Homepage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("mtn");
   const [expandedFaq, setExpandedFaq] = useState(null);
 
   const scrollToSection = (section) => {
@@ -142,7 +141,7 @@ const Homepage = () => {
 
   useEffect(() => {
     fetchDataPlans();
-  }, []);
+  }, [fetchDataPlans]);
 
   return (
     <div className="homepage">

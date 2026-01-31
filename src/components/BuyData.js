@@ -16,7 +16,7 @@ const BuyData = () => {
 
   useEffect(() => {
     fetchDataPlans();
-  }, []);
+  }, [fetchDataPlans]);
 
   // console.log("data plans for buy data", dataPlans);
 

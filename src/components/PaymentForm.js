@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useWallet } from "./walletContext";
-import { useNavigate } from "react-router";
 import SideBar from "./SideBar";
 import Header from "./Header";
 import { formatCurrency } from "../utils/helperFunctions";
@@ -13,7 +12,6 @@ const PaymentForm = () => {
   const [success, setSuccess] = useState("");
 
   const { balance, fundWallet } = useWallet();
-  const navigate = useNavigate();
 
   const handleFundWallet = async (e) => {
     e.preventDefault();

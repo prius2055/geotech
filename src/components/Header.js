@@ -1,10 +1,8 @@
 import React from "react";
 import { useAuth } from "./authContext";
-import { Link, useNavigate } from "react-router";
 
 const Header = () => {
   const { logout } = useAuth();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
