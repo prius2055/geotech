@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import SideBar from "../components/SideBar";
 import Header from "../components/Header";
 // import { useNavigate } from "react-router";
 import "./ServiceManagement.css";
+
+// const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://vtu-backend-wjn6.onrender.com";
 
 const TransactionService = () => {
   const [transactions, setTransactions] = useState([]);
@@ -16,22 +19,14 @@ const TransactionService = () => {
 
   // const navigate = useNavigate();
 
-  useEffect(() => {
-    syncTransactions();
-  }, [page]);
-
-  const syncTransactions = async () => {
+  const syncTransactions = useCallback(async () => {
     const token = localStorage.getItem("token");
-    // console.log(token);
     setLoading(true);
     setError(null);
     try {
       const response = await fetch(
-        `http://localhost:5000/api/v1/admin/transactions?page=${page}&limit=${limit}`,
+        `${BASE_URL}/api/v1/admin/transactions?page=${page}&limit=${limit}`,
         {
-          // const response = await fetch(
-          //   `https://vtu-backend-wjn6.onrender.com/api/v1/admin/transactions?page=${page}&limit=${limit}`,
-          //   {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -52,7 +47,11 @@ const TransactionService = () => {
       console.error("Error fetching data plans:", error);
       setError("Failed to fetch data plans");
     }
-  };
+  }, [page, limit]);
+
+  useEffect(() => {
+    syncTransactions();
+  }, [page, syncTransactions]);
 
   return (
     <div className="service-container">

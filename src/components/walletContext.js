@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useRef } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useRef,
+  useCallback,
+} from "react";
 import { useEffect } from "react";
 const WalletContext = createContext();
 
@@ -25,11 +31,7 @@ export const WalletProvider = ({ children }) => {
     "9MOBILE": 4,
   };
 
-  useEffect(() => {
-    refreshWallet();
-  }, [token]);
-
-  const refreshWallet = async () => {
+  const refreshWallet = useCallback(async () => {
     if (!token) {
       setLoading(false);
       return;
@@ -59,7 +61,7 @@ export const WalletProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   const fetchDataPlans = async () => {
     setLoading(true);
@@ -494,6 +496,10 @@ export const WalletProvider = ({ children }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    refreshWallet();
+  }, [token, refreshWallet]);
 
   return (
     <WalletContext.Provider
