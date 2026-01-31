@@ -54,8 +54,6 @@ const ServiceManagement = () => {
     }
   };
 
-  console.log(dataPlans);
-
   // Step 1: Group plans by service_name
 
   const sortedPlans = dataPlans.sort((a, b) => {

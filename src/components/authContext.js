@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      console.log("🔵 Checking authentication...");
+      // console.log("🔵 Checking authentication...");
 
       const response = await fetch(`${BASE_URL}/verify`, {
         headers: {
@@ -39,12 +39,12 @@ export const AuthProvider = ({ children }) => {
         const data = await response.json();
         setUser(data.user);
       } else {
-        console.log("⚠️ Token invalid, clearing...");
+        // console.log("⚠️ Token invalid, clearing...");
         localStorage.removeItem("token");
         setUser(null);
       }
     } catch (error) {
-      console.error("❌ Auth check failed:", error);
+      // console.error("❌ Auth check failed:", error);
       localStorage.removeItem("token");
       setUser(null);
     } finally {
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      console.log("🔵 Registering user...");
+      // console.log("🔵 Registering user...");
 
       const response = await fetch(`${BASE_URL}/register`, {
         method: "POST",
@@ -66,10 +66,10 @@ export const AuthProvider = ({ children }) => {
 
       const data = await response.json();
 
-      console.log(data);
+      // console.log(data);
 
       if (data.status === "success") {
-        console.log("✅ Registration successful");
+        // console.log("✅ Registration successful");
 
         localStorage.setItem("token", data.token);
         setUser(data.user);
@@ -78,14 +78,14 @@ export const AuthProvider = ({ children }) => {
           message: "Registration successful!",
         };
       } else {
-        console.error("❌ Registration failed:", data.message);
+        // console.error("❌ Registration failed:", data.message);
         return {
           status: false,
           message: data.message || "Registration failed",
         };
       }
     } catch (error) {
-      console.error("❌ Registration error:", error);
+      // console.error("❌ Registration error:", error);
       return {
         status: "error",
         message: error.message || "Something went wrong",
@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      console.log("🔵 Logging in...");
+      // console.log("🔵 Logging in...");
 
       const response = await fetch(`${BASE_URL}/login`, {
         method: "POST",
@@ -117,14 +117,14 @@ export const AuthProvider = ({ children }) => {
         return { status: false, message: data.message || "Login failed" };
       }
     } catch (error) {
-      console.error("❌ Login error:", error);
+      // console.error("❌ Login error:", error);
       return { status: false, message: error.message };
     }
   };
 
   const requestPasswordReset = async (email) => {
     try {
-      console.log("🔵 Logging in...");
+      // console.log("🔵 Logging in...");
 
       const response = await fetch(`${BASE_URL}/password/reset`, {
         method: "POST",
@@ -137,23 +137,23 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok && data.status === "success") {
-        console.log("✅ Reset successful");
+        // console.log("✅ Reset successful");
         localStorage.setItem("token", response.data.token);
         setUser(data.user);
         return { status: true, user: data.user };
       } else {
-        console.error("❌ Password reset failed:", data.message);
+        // console.error("❌ Password reset failed:", data.message);
         return { status: false, message: data.message || "Reset failed" };
       }
     } catch (error) {
-      console.error("❌ Password reset error:", error);
+      // console.error("❌ Password reset error:", error);
       return { status: false, message: error.message };
     }
   };
 
   const resetPassword = async (password, token) => {
     try {
-      console.log("🔵 Logging in...");
+      // console.log("🔵 Logging in...");
 
       const response = await fetch(`${BASE_URL}/password/reset/${token}`, {
         method: "POST",
@@ -166,16 +166,16 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok && data.status === "success") {
-        console.log("✅ Reset successful");
+        // console.log("✅ Reset successful");
         localStorage.setItem("token", response.data.token);
         setUser(data.user);
         return { status: true, user: data.user };
       } else {
-        console.error("❌ Password reset failed:", data.message);
+        // console.error("❌ Password reset failed:", data.message);
         return { status: false, message: data.message || "Reset failed" };
       }
     } catch (error) {
-      console.error("❌ Password reset error:", error);
+      // console.error("❌ Password reset error:", error);
       return { status: false, message: error.message };
     }
   };
