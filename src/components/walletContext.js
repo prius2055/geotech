@@ -2,6 +2,7 @@ import {
   createContext,
   useContext,
   useState,
+  useMemo,
   useRef,
   useCallback,
 } from "react";
@@ -24,12 +25,15 @@ export const WalletProvider = ({ children }) => {
 
   const token = localStorage.getItem("token");
 
-  const networkOrder = {
-    MTN: 1,
-    AIRTEL: 2,
-    GLO: 3,
-    "9MOBILE": 4,
-  };
+  const networkOrder = useMemo(
+    () => ({
+      MTN: 1,
+      AIRTEL: 2,
+      GLO: 3,
+      "9MOBILE": 4,
+    }),
+    [],
+  );
 
   const refreshWallet = useCallback(async () => {
     if (!token) {
@@ -61,7 +65,7 @@ export const WalletProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [token]);
 
   const fetchDataPlans = useCallback(async () => {
     setLoading(true);
@@ -103,7 +107,7 @@ export const WalletProvider = ({ children }) => {
       console.error("Error fetching data plans:", error);
       setError("Failed to fetch data plans");
     }
-  }, []);
+  }, [token, networkOrder]);
 
   const fundWallet = async (amount) => {
     try {

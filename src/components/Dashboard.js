@@ -29,23 +29,6 @@ const Dashboard = () => {
 
   const { referralEarnings, referralsCount } = user;
 
-  console.log(dataPlans);
-
-  // Step 1: Group plans by service_name
-
-  // const sortedPlans = dataPlans?.sort((a, b) => {
-  //   const orderA = networkOrder[a.network?.toUpperCase()] ?? 99;
-  //   const orderB = networkOrder[b.network?.toUpperCase()] ?? 99;
-
-  //   return orderA - orderB;
-  // });
-
-  // const groupedByNetwork = sortedPlans.reduce((acc, plan) => {
-  //   acc[plan.network] = acc[plan.network] || [];
-  //   acc[plan.network].push(plan);
-  //   return acc;
-  // }, {});
-
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-NG", {
       style: "currency",
@@ -55,7 +38,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchDataPlans();
-  }, []);
+  }, [fetchDataPlans]);
 
   const handleUpgradeClick = () => {
     setShowUpgradeModal(true);
