@@ -16,7 +16,7 @@ const Login = () => {
   useEffect(() => {
     // Redirect if already logged in
     if (user) {
-      console.log("✅ User already logged in, redirecting to dashboard...");
+      // console.log("✅ User already logged in, redirecting to dashboard...");
       navigate("/dashboard");
     }
   }, [user, navigate]);
@@ -41,15 +41,15 @@ const Login = () => {
     //   return;
     // }
 
-    console.log("🔵 Attempting login...");
+    // console.log("🔵 Attempting login...");
 
     // Call backend login
     const result = await login(username.trim(), password.trim());
 
-    console.log("📊 Login result:", result);
+    // console.log("📊 Login result:", result);
 
     if (result.status) {
-      console.log("✅ Login successful, redirecting to dashboard...");
+      // console.log("✅ Login successful, redirecting to dashboard...");
       setError("");
       // Navigation will happen via useEffect when user state updates
       setTimeout(() => {

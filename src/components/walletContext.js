@@ -42,7 +42,7 @@ export const WalletProvider = ({ children }) => {
     }
 
     try {
-      console.log("🔵 Checking authentication...");
+      // console.log("🔵 Checking authentication...");
 
       const response = await fetch(`${BASE_URL}/wallet/get`, {
         headers: {
@@ -55,13 +55,13 @@ export const WalletProvider = ({ children }) => {
 
       if (data.status === "success") {
         const wallet = data.data.wallet;
-        console.log("wallet balance", wallet);
+        // console.log("wallet balance", wallet);
         setBalance(wallet.balance);
         setTotalFunded(wallet.totalFunded);
         setTotalSpent(wallet.totalSpent);
       }
     } catch (error) {
-      console.error("❌ Auth check failed:", error);
+      // console.error("❌ Auth check failed:", error);
     } finally {
       setLoading(false);
     }
@@ -80,7 +80,7 @@ export const WalletProvider = ({ children }) => {
       });
       const data = await response.json();
 
-      console.log("api result", data);
+      // console.log("api result", data);
 
       if (data.status === "success") {
         setLoading(false);
@@ -104,7 +104,7 @@ export const WalletProvider = ({ children }) => {
         setDataPlans(groupedByNetwork);
       }
     } catch (error) {
-      console.error("Error fetching data plans:", error);
+      // console.error("Error fetching data plans:", error);
       setError("Failed to fetch data plans");
     }
   }, [token, networkOrder]);
@@ -123,7 +123,7 @@ export const WalletProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
 
       if (data.status !== "success") {
         throw new Error(data.message || "Payment initialization failed");
@@ -132,7 +132,7 @@ export const WalletProvider = ({ children }) => {
       // 🔴 Redirect user to Paystack checkout
       window.location.href = data.authorization_url;
     } catch (error) {
-      console.error("Fund wallet error:", error.message);
+      // console.error("Fund wallet error:", error.message);
       setError(error.message);
     }
   };
@@ -181,7 +181,7 @@ export const WalletProvider = ({ children }) => {
       return { success: false, message: "User not authenticated" };
     }
 
-    console.log(payload);
+    // console.log(payload);
 
     setLoading(true);
     setError(null);
@@ -229,7 +229,7 @@ export const WalletProvider = ({ children }) => {
       return { success: false, message: "User not authenticated" };
     }
 
-    console.log(payload);
+    // console.log(payload);
 
     setLoading(true);
     setError(null);
@@ -296,7 +296,7 @@ export const WalletProvider = ({ children }) => {
       }
 
       // ✅ Update wallet
-      console.log(data.result);
+      // console.log(data.result);
 
       return {
         status: true,
@@ -334,7 +334,7 @@ export const WalletProvider = ({ children }) => {
 
       const data = await res.json();
 
-      console.log(data);
+      // console.log(data);
 
       if (!res.ok || !data.status) {
         throw new Error(data.message || "Data purchase failed");
@@ -387,7 +387,7 @@ export const WalletProvider = ({ children }) => {
       }
 
       // ✅ Update wallet
-      console.log(data.result);
+      // console.log(data.result);
 
       return {
         status: true,
@@ -425,7 +425,7 @@ export const WalletProvider = ({ children }) => {
 
       const data = await res.json();
 
-      console.log(data);
+      // console.log(data);
 
       if (!res.ok || !data.status) {
         throw new Error(data.message || "Data purchase failed");
@@ -473,7 +473,7 @@ export const WalletProvider = ({ children }) => {
 
       const data = await response.json();
 
-      console.log("✅ Upgrade response:", data);
+      // console.log("✅ Upgrade response:", data);
 
       if (!response.ok || data.status !== "success") {
         throw new Error(data.message || "Upgrade failed");
