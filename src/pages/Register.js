@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from "react-router";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../components/authContext";
 
-import './Auth.css';
+import "./Auth.css";
 
 const Register = () => {
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    fullName: '',
-    username: '',
-    email: '',
-    phone: '',
-    address: '',
-    referral: '',
-    password: '',
-    confirmPassword: '',
-    agreeTerms: false
+    fullName: "",
+    username: "",
+    email: "",
+    phone: "",
+    address: "",
+    referral: "",
+    password: "",
+    confirmPassword: "",
+    agreeTerms: false,
   });
 
   const navigate = useNavigate();
@@ -26,82 +26,90 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
+
+    setError("");
+    setSuccess("");
     setIsLoading(true);
 
-    console.log('=== REGISTRATION STARTED ===');
-    console.log('Form Data:', formData);
+    console.log("=== REGISTRATION STARTED ===");
+    console.log("Form Data:", formData);
 
-    // Validation
-    if (!formData.fullName || !formData.username || !formData.email || 
-        !formData.phone || !formData.address || !formData.password) {
-      setError('Please fill in all required fields');
+    try {
+      // 🔍 Validation
+      if (
+        !formData.fullName ||
+        !formData.username ||
+        !formData.email ||
+        !formData.phone ||
+        !formData.address ||
+        !formData.password
+      ) {
+        throw new Error("Please fill in all required fields");
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        throw new Error("Please enter a valid email address");
+      }
+
+      if (formData.password.length < 8) {
+        throw new Error("Password must be at least 8 characters long");
+      }
+
+      if (formData.password !== formData.confirmPassword) {
+        throw new Error("Passwords do not match");
+      }
+
+      if (!formData.agreeTerms) {
+        throw new Error("You must agree to the terms and conditions");
+      }
+
+      console.log("📡 Sending registration request...");
+
+      // 🚀 Call backend
+      const result = await register({
+        fullName: formData.fullName,
+        username: formData.username,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        referrer: formData.referral,
+        password: formData.password,
+      });
+
+      console.log("=== REGISTRATION RESULT ===");
+      console.log("Result:", result);
+
+      if (result?.status) {
+        console.log("✅ Registration successful");
+        setError("");
+        setSuccess("Account created successfully!");
+
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+      } else {
+        console.warn("⚠️ Backend rejected registration");
+        setError(result?.message || "Registration failed. Please try again.");
+      }
+    } catch (err) {
+      console.error("🔥 Registration error caught:", err);
+
+      setError(
+        err.message ||
+          "Something went wrong. Please check your connection and try again."
+      );
+    } finally {
+      console.log("🧹 Registration cleanup complete");
       setIsLoading(false);
-      return;
-    }
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setError('Please enter a valid email address');
-      setIsLoading(false);
-      return;
-    }
-
-    // Password validation
-    if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters long');
-      setIsLoading(false);
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
-      setIsLoading(false);
-      return;
-    }
-
-    if (!formData.agreeTerms) {
-      setError('You must agree to the terms and conditions');
-      setIsLoading(false);
-      return;
-    }
-
-    // Call backend register
-    const result = await register({
-      fullName: formData.fullName,
-      username: formData.username,
-      email: formData.email,
-      phone: formData.phone,
-      address: formData.address,
-      referral: formData.referral,
-      password: formData.password
-    });
-
-    console.log('=== REGISTRATION RESULT ===');
-    console.log('Result:', result);
-
-    setIsLoading(false);
-
-    if (result.success) {
-      setSuccess(result.message);
-      console.log('✅ Registration successful!');
-      // Redirect to login after 2 seconds
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
-    } else {
-      console.error('❌ Registration failed:', result.message);
-      setError(result.message || 'Registration failed. Please try again.');
     }
   };
 
@@ -118,30 +126,34 @@ const Register = () => {
       <div className="auth-card register-card">
         <h1 className="auth-brand">GEODNATECH</h1>
         <h2 className="auth-title">Sign Up</h2>
-        
+
         <div className="auth-form">
           {error && (
-            <div style={{ 
-              padding: '10px', 
-              marginBottom: '15px', 
-              backgroundColor: '#fee', 
-              color: '#c33',
-              borderRadius: '5px',
-              fontSize: '14px'
-            }}>
+            <div
+              style={{
+                padding: "10px",
+                marginBottom: "15px",
+                backgroundColor: "#fee",
+                color: "#c33",
+                borderRadius: "5px",
+                fontSize: "14px",
+              }}
+            >
               {error}
             </div>
           )}
 
           {success && (
-            <div style={{ 
-              padding: '10px', 
-              marginBottom: '15px', 
-              backgroundColor: '#efe', 
-              color: '#3c3',
-              borderRadius: '5px',
-              fontSize: '14px'
-            }}>
+            <div
+              style={{
+                padding: "10px",
+                marginBottom: "15px",
+                backgroundColor: "#efe",
+                color: "#3c3",
+                borderRadius: "5px",
+                fontSize: "14px",
+              }}
+            >
               {success}
             </div>
           )}
@@ -228,7 +240,9 @@ const Register = () => {
               onChange={handleChange}
               placeholder="Create a password"
             />
-            <small className="form-hint">min_length: 8 mix characters [e.g., musa1234]</small>
+            <small className="form-hint">
+              min_length: 8 mix characters [e.g., musa1234]
+            </small>
           </div>
 
           <div className="form-group">
@@ -251,16 +265,19 @@ const Register = () => {
                 checked={formData.agreeTerms}
                 onChange={handleChange}
               />
-              <span>I Agree <span className="terms-link">to the terms and conditions</span></span>
+              <span>
+                I Agree{" "}
+                <span className="terms-link">to the terms and conditions</span>
+              </span>
             </label>
           </div>
 
-          <button 
-            onClick={handleSubmit} 
+          <button
+            onClick={handleSubmit}
             className="btn-submit btn-block"
             disabled={isLoading}
           >
-            {isLoading ? 'Creating Account...' : 'Sign Up'}
+            {isLoading ? "Creating Account..." : "Sign Up"}
           </button>
 
           <div className="auth-switch">

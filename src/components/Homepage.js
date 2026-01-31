@@ -1,6 +1,6 @@
-import React, { useState,useEffect} from 'react';
-import { Link } from 'react-router';
-import { useWallet } from './walletContext';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router";
+import { useWallet } from "./walletContext";
 
 import MobilePhone from "../img/mobile_phone.png";
 import AboutPhone from "../img/about.png";
@@ -8,109 +8,141 @@ import Mojeed from "../img/mojeed.jpg";
 import Tenny from "../img/tenny.jpg";
 import IT from "../img/IT.jpg";
 
-import './Homepage.css';
+import "./Homepage.css";
 
 const Homepage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('mtn');
+  const [activeTab, setActiveTab] = useState("mtn");
   const [expandedFaq, setExpandedFaq] = useState(null);
 
   const scrollToSection = (section) => {
-    document.getElementById(section.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
+    document
+      .getElementById(section.toLowerCase())
+      ?.scrollIntoView({ behavior: "smooth" });
     setMobileMenuOpen(false);
   };
 
-
-
-  const navLinks = ['HOME', 'ABOUT', 'FEATURES', 'PRICING', 'FAQS', 'CONTACT'];
+  const navLinks = ["HOME", "ABOUT", "FEATURES", "PRICING", "FAQS", "CONTACT"];
 
   const footerNavLinks = [
-  { label: "Developer's API", href: "#api" },
-  { label: "About Us", href: "#about" },
-  { label: "Services", href: "#about" },
-  { label: "F.A.Q's", href: "#faqs" },
-];
-  
-  const features = [
-    { icon: '➜]', title: 'AUTOMATION', desc: 'Convert MTN, 9mobile, Airtel and Glo airtime to cash instantly. Airtime topup and data purchase are automated and get delivered to you almost instantly.' },
-    { icon: '🚀', title: "WE'RE FAST", desc: 'GEODNATECH lets you purchase mobile data, top up airtime, pay your cable and electricity bills e.t.c all at the speed of light.' },
-    { icon: '🛡️', title: "YOU'RE SAFE", desc: 'Your E-wallet is secured with a military grade comodo SSL certificate to ensure that your funds will be safe for as long as you want it to be.' },
-    { icon: '✓', title: "WE'RE RELIABLE", desc: 'We use a customized application specifically designed for testing noise to keep away from people.' }
+    { label: "Developer's API", href: "#api" },
+    { label: "About Us", href: "#about" },
+    { label: "Services", href: "#about" },
+    { label: "F.A.Q's", href: "#faqs" },
   ];
 
+  const features = [
+    {
+      icon: "➜]",
+      title: "AUTOMATION",
+      desc: "Convert MTN, 9mobile, Airtel and Glo airtime to cash instantly. Airtime topup and data purchase are automated and get delivered to you almost instantly.",
+    },
+    {
+      icon: "🚀",
+      title: "WE'RE FAST",
+      desc: "GEODNATECH lets you purchase mobile data, top up airtime, pay your cable and electricity bills e.t.c all at the speed of light.",
+    },
+    {
+      icon: "🛡️",
+      title: "YOU'RE SAFE",
+      desc: "Your E-wallet is secured with a military grade comodo SSL certificate to ensure that your funds will be safe for as long as you want it to be.",
+    },
+    {
+      icon: "✓",
+      title: "WE'RE RELIABLE",
+      desc: "We use a customized application specifically designed for testing noise to keep away from people.",
+    },
+  ];
 
   const services = [
-    { icon: '📡', title: 'BUY DATA', desc: 'Start enjoying this very low rates Data plan for your internet browsing databundles.' },
-    { icon: '💡', title: 'UTILITY PAYMENT', desc: 'Because we understand your needs, we have made bills and utilities payment convenient.' },
-    { icon: '📺', title: 'CABLE SUBSCRIPTION', desc: 'Instantly Activate Cable subscription with favourable discount compared to others.' },
-    { icon: '📱', title: 'AIRTIME TOPUP', desc: 'Making an online recharge has become very easy and safe on GEODNATECH.' },
-    { icon: '💵', title: 'AIRTIME TO CASH', desc: 'We offer this service at a very good attractive rate login to see current conversion rate.' },
-    { icon: '💬', title: 'BULK SMS', desc: 'Send BulkSMS to any number for as low as just 1.5kobo per unit.' }
+    {
+      icon: "📡",
+      title: "BUY DATA",
+      desc: "Start enjoying this very low rates Data plan for your internet browsing databundles.",
+    },
+    {
+      icon: "💡",
+      title: "UTILITY PAYMENT",
+      desc: "Because we understand your needs, we have made bills and utilities payment convenient.",
+    },
+    {
+      icon: "📺",
+      title: "CABLE SUBSCRIPTION",
+      desc: "Instantly Activate Cable subscription with favourable discount compared to others.",
+    },
+    {
+      icon: "📱",
+      title: "AIRTIME TOPUP",
+      desc: "Making an online recharge has become very easy and safe on GEODNATECH.",
+    },
+    {
+      icon: "💵",
+      title: "AIRTIME TO CASH",
+      desc: "We offer this service at a very good attractive rate login to see current conversion rate.",
+    },
+    {
+      icon: "💬",
+      title: "BULK SMS",
+      desc: "Send BulkSMS to any number for as low as just 1.5kobo per unit.",
+    },
   ];
 
   const stats = [
-    { icon: '👥', value: '4560', label: 'USERS' },
-    { icon: '❤︎', value: '4032', label: 'HAPPY CLIENTS' },
-    { icon: '★', value: '3238', label: 'LOGGED IN USERS' },
-    { icon: '🕐', value: '4', label: 'YEARS OF EXPERIENCE' }
+    { icon: "👥", value: "4560", label: "USERS" },
+    { icon: "❤︎", value: "4032", label: "HAPPY CLIENTS" },
+    { icon: "★", value: "3238", label: "LOGGED IN USERS" },
+    { icon: "🕐", value: "4", label: "YEARS OF EXPERIENCE" },
   ];
 
   const testimonials = [
-    { name: 'Mojeed', role: 'Web Developer', avatar:Mojeed, text: '"I love the quick response to issues. We might just get along well. So far so good. There\'s no star here but I give ⭐⭐⭐.."' },
-    { name: 'I.T-Guy', role: 'UI / UX Designer', avatar:IT, text: '"This site is great... All thanks to geodnatech.com. I can really say that since I joined this site I have been earning more than before..."' },
-    { name: 'Tenny', role: 'Web Developer', avatar:Tenny, text: '"Amazing!...i recommend to all data resellers...kudos."' }
+    {
+      name: "Mojeed",
+      role: "Web Developer",
+      avatar: Mojeed,
+      text: '"I love the quick response to issues. We might just get along well. So far so good. There\'s no star here but I give ⭐⭐⭐.."',
+    },
+    {
+      name: "I.T-Guy",
+      role: "UI / UX Designer",
+      avatar: IT,
+      text: '"This site is great... All thanks to geodnatech.com. I can really say that since I joined this site I have been earning more than before..."',
+    },
+    {
+      name: "Tenny",
+      role: "Web Developer",
+      avatar: Tenny,
+      text: '"Amazing!...i recommend to all data resellers...kudos."',
+    },
   ];
-
-  // const pricingData = {
-  //   mtn: [
-  //     { size: '500MB', price: '₦350', duration: 'daily' },
-  //     { size: '1.0GB', price: '₦510', duration: 'daily' },
-  //     { size: '2.0GB', price: '₦1100', duration: '1 month' }
-  //   ],
-  //   glo: [
-  //     { size: '1.0GB', price: '₦415', duration: '1 month' },
-  //     { size: '2.0GB', price: '₦830', duration: '1 month' },
-  //     { size: '3.0GB', price: '₦1245', duration: '1 month' }
-  //   ],
-  //   airtel: [
-  //     { size: '1.0GB', price: '₦1250', duration: '1 month' },
-  //     { size: '2.0GB', price: '₦1490', duration: '1 month' },
-  //     { size: '3.0GB', price: '₦1980', duration: '1 month' }
-  //   ],
-  //   '9mobile': [
-  //     { size: '1.0GB', price: '₦380', duration: '1 month' },
-  //     { size: '2.0GB', price: '₦730', duration: '1 month' },
-  //     { size: '3.0GB', price: '₦1100', duration: '1 month' }
-  //   ]
-  // };
 
   const faqs = [
-    { q: 'How To Buy Data?', a: '1. Log in to your account\n2. Register if needed\n3. Fund your account\n4. Select payment method' },
-    { q: 'How Do I Fund My Wallet?', a: 'You can fund your wallet using: Bank payment, ATM card via Paystack/Monnify, Payment with airtime, or Coupon Code(s)' },
-    { q: 'Can I Send Airtime?', a: 'Yes, with a small additional charge for payment with airtime.' },
-    { q: 'What Are The Codes For Checking Data Balance?', a: 'MTN: *323#\n9mobile: *228#\nAirtel: *323#\nGlo: *323#' },
-    { q: 'Can Data Bought from you be Shared?', a: 'Only for Glo. MTN, 9mobile, and airtel data can\'t be shared.' }
+    {
+      q: "How To Buy Data?",
+      a: "1. Log in to your account\n2. Register if needed\n3. Fund your account\n4. Select payment method",
+    },
+    {
+      q: "How Do I Fund My Wallet?",
+      a: "You can fund your wallet using: Bank payment, ATM card via Paystack/Monnify, Payment with airtime, or Coupon Code(s)",
+    },
+    {
+      q: "Can I Send Airtime?",
+      a: "Yes, with a small additional charge for payment with airtime.",
+    },
+    {
+      q: "What Are The Codes For Checking Data Balance?",
+      a: "MTN: *323#\n9mobile: *228#\nAirtel: *323#\nGlo: *323#",
+    },
+    {
+      q: "Can Data Bought from you be Shared?",
+      a: "Only for Glo. MTN, 9mobile, and airtel data can't be shared.",
+    },
   ];
 
+  const { dataPlans, fetchDataPlans } = useWallet();
 
-const{dataPlans} = useWallet()
-
- // Step 1: Group plans by service_name
-const allPlans = Object.values(dataPlans) // { CORPORATE, SME, ... }
-  .flatMap(network =>
-    Object.values(network).flat()
-  );
-
-const groupedByNetwork = allPlans?.reduce((acc, plan) => {
-  const network = plan.plan_network;
-
-  if (!acc[network]) {
-    acc[network] = [];
-  }
-
-  acc[network].push(plan);
-  return acc;
-}, {});
+  useEffect(() => {
+    fetchDataPlans();
+  }, []);
 
   return (
     <div className="homepage">
@@ -119,20 +151,25 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
         <div className="nav-container">
           <div className="logo">GEODNATECH</div>
           <ul className="nav-links desktop-only">
-            {navLinks.map(link => (
+            {navLinks.map((link) => (
               <li key={link}>
                 <p onClick={() => scrollToSection(link)}>{link}</p>
               </li>
             ))}
           </ul>
           <div className="nav-buttons desktop-only">
-
-            
-            <Link to="/login" className="btn btn-outline">LOGIN</Link>
-            <Link to="/signup" className="btn btn-primary">REGISTER</Link>
+            <Link to="/login" className="btn btn-outline">
+              LOGIN
+            </Link>
+            <Link to="/signup" className="btn btn-primary">
+              REGISTER
+            </Link>
           </div>
-          <button className="mobile-menu-btn mobile-only" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? '✕' : '☰'}
+          <button
+            className="mobile-menu-btn mobile-only"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? "✕" : "☰"}
           </button>
         </div>
       </nav>
@@ -142,19 +179,28 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
         <div className="hero-container">
           <div className="hero-text">
             <h1>WELCOME TO GEODNATECH</h1>
-            <p>GEODNATECH is a company of GEODNATECH Nigeria Limited. We offer best deals when it comes to internet Data Plans, Airtime, Bills payment like GOTV, DSTV & STARTIMES.</p>
+            <p>
+              GEODNATECH is a company of GEODNATECH Nigeria Limited. We offer
+              best deals when it comes to internet Data Plans, Airtime, Bills
+              payment like GOTV, DSTV & STARTIMES.
+            </p>
             <div className="hero-buttons">
-                 <Link to="/login" className="btn btn-outline">LOGIN</Link>
-            <Link to="/signup" className="btn btn-primary">REGISTER</Link>
+              <Link to="/login" className="btn btn-outline">
+                LOGIN
+              </Link>
+              <Link to="/signup" className="btn btn-primary">
+                REGISTER
+              </Link>
             </div>
           </div>
-        
 
-          <img src={MobilePhone} alt="A mobile phone"/>
+          <img src={MobilePhone} alt="A mobile phone" />
         </div>
         <svg className="hero-wave" viewBox="0 0 1440 320">
-          <path fill="#ffffff" fillOpacity="1"
-          d="
+          <path
+            fill="#ffffff"
+            fillOpacity="1"
+            d="
           M0,160
           C90,80  180,240  270,160
           C360,80  450,240  540,160
@@ -162,7 +208,8 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
           C900,80  990,240 1080,160
           C1170,80 1260,240 1350,160
           C1400,120 1440,140 1440,160
-          V320 H0 Z"/>
+          V320 H0 Z"
+          />
         </svg>
       </section>
 
@@ -174,21 +221,35 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
           <div className="title-underline small"></div>
         </div>
         <p className="section-description">
-          GEODNATECH is a registered telecommunication vendor known for providing internet services, airtime VTU, cable TV subscriptions, electricity payment, converting airtime to cash, bitcoin buying and selling, and selling of UK used phones at affordable prices.
+          GEODNATECH is a registered telecommunication vendor known for
+          providing internet services, airtime VTU, cable TV subscriptions,
+          electricity payment, converting airtime to cash, bitcoin buying and
+          selling, and selling of UK used phones at affordable prices.
         </p>
         <div className="container about-grid">
           <div className="about-content">
             <h3>BEST TELECOMMUNICATION COMPANY</h3>
             <div className="content-underline"></div>
-            <p>GEODNATECH also gives people the opportunity of becoming their reseller and be making money on hourly and daily basis so as to boost their financial status.</p>
-            <p>We offer instant recharge of Airtime, Databundle, CableTV (DStv, GOtv & Startimes), Electricity Bill Payment, Conversion of Airtime to cash and selling of result checkers(WAEC & NECO) at better rates than others.</p>
+            <p>
+              GEODNATECH also gives people the opportunity of becoming their
+              reseller and be making money on hourly and daily basis so as to
+              boost their financial status.
+            </p>
+            <p>
+              We offer instant recharge of Airtime, Databundle, CableTV (DStv,
+              GOtv & Startimes), Electricity Bill Payment, Conversion of Airtime
+              to cash and selling of result checkers(WAEC & NECO) at better
+              rates than others.
+            </p>
             <div className="check-list">
-              {['EASY TO USED', 'EASY TO CUSTOMIZE', 'AWESOME DESIGN'].map((item, i) => (
-                <div key={i} className="check-item">
-                  <span className="check-icon">✓</span>
-                  <span>{item}</span>
-                </div>
-              ))}
+              {["EASY TO USED", "EASY TO CUSTOMIZE", "AWESOME DESIGN"].map(
+                (item, i) => (
+                  <div key={i} className="check-item">
+                    <span className="check-icon">✓</span>
+                    <span>{item}</span>
+                  </div>
+                )
+              )}
             </div>
           </div>
 
@@ -199,8 +260,10 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
       {/* Features Section */}
       <section id="features" className="features-section">
         <svg className="features-wave-top" viewBox="0 0 1440 320">
-          <path fill="#ffffff" fillOpacity="1"
-          d="
+          <path
+            fill="#ffffff"
+            fillOpacity="1"
+            d="
             M0,160
             C29,187 58,133 87,160
             C116,187 145,133 174,160
@@ -220,35 +283,38 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
             C1334,187 1363,133 1392,160
             C1416,171 1430,149 1440,160
             V0 H0 Z
-            " />
+            "
+          />
         </svg>
 
-        
         <div className="section-header">
           <h2 className="section-title">WHY CHOOSE US?</h2>
-        <div className="title-underline big"></div>
+          <div className="title-underline big"></div>
           <div className="title-underline small"></div>
           <p className="section-description">
-            Here at GEODNATECH our services are completely Fast, Secure & Automated. We provide 24/7 Support to our registered users.
+            Here at GEODNATECH our services are completely Fast, Secure &
+            Automated. We provide 24/7 Support to our registered users.
           </p>
         </div>
 
         <div className="container features-content-container">
-            <div className="features-grid">
-          {features.map((f, i) => (
-            <div key={i} className="feature-card">
-              <div className="feature-icon">{f.icon}</div>
-              <div className="feature-content">
-                <h3>{f.title}</h3>
-                <p>{f.desc}</p>
+          <div className="features-grid">
+            {features.map((f, i) => (
+              <div key={i} className="feature-card">
+                <div className="feature-icon">{f.icon}</div>
+                <div className="feature-content">
+                  <h3>{f.title}</h3>
+                  <p>{f.desc}</p>
+                </div>
               </div>
-            </div>
-          ))}
-           </div>
-            <img src={MobilePhone} alt="App Mockup mobile phone"></img>
+            ))}
+          </div>
+          <img src={MobilePhone} alt="App Mockup mobile phone"></img>
         </div>
         <svg className="features-wave-bottom" viewBox="0 0 1440 320">
-          <path fill="#ffffff" fillOpacity="1"
+          <path
+            fill="#ffffff"
+            fillOpacity="1"
             d="
               M0,160
     C24,133 48,187 72,160
@@ -272,16 +338,14 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
     C1320,133 1344,187 1368,160
     C1384,149 1412,171 1440,160
     V320 H0 Z
-    " />
-</svg>
-
-
+    "
+          />
+        </svg>
       </section>
-
-      <div className='container'>       
+      <div className="container">
         <div className="section-header">
           <h2 className="section-title">OUR AWSOME SERVICES</h2>
-            <div className="title-underline big"></div>
+          <div className="title-underline big"></div>
           <div className="title-underline small"></div>
           <p className="section-description">We Provide The Best Services.</p>
         </div>
@@ -298,14 +362,15 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
             </div>
           ))}
         </div>
-        </div>
+      </div>
 
       {/* Stats Section */}
       <section className="stats-section">
-       <svg className="stats-wave-top" viewBox="0 0 1440 240">
-  <path fill="#ffffff" fillOpacity="1"
-    d="
-      M0,100
+        <svg className="stats-wave-top" viewBox="0 0 1440 240">
+          <path
+            fill="#ffffff"
+            fillOpacity="1"
+            d="M0,100
       C29,118 58,82 87,100
       C116,118 145,82 174,100
       C203,118 232,82 261,100
@@ -324,8 +389,9 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
       C1334,118 1363,82 1392,100
       C1416,110 1430,95 1440,100
       V0 H0 Z
-    " />
-</svg>
+    "
+          />
+        </svg>
 
         <div className="stats-container gradient-bg">
           <div className="stats-grid">
@@ -339,8 +405,10 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
           </div>
         </div>
         <svg className="stats-wave-bottom" viewBox="0 0 1440 240">
-  <path fill="#ffffff" fillOpacity="1"
-        d="
+          <path
+            fill="#ffffff"
+            fillOpacity="1"
+            d="
           M0,120
     C24,105 48,145 72,120
     C96,105 120,145 144,120
@@ -363,21 +431,23 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
     C1320,105 1344,145 1368,120
     C1384,122 1412,135 1440,120
     V240 H0 Z
-  " />
-</svg>
-
+  "
+          />
+        </svg>
       </section>
 
       {/* Partners */}
       <section className="partners-section">
         <div className="section-header">
           <h2 className="section-title">OUR AMAZING PARTNERS</h2>
-           <div className="title-underline big"></div>
+          <div className="title-underline big"></div>
           <div className="title-underline small"></div>
         </div>
         <div className="partners-grid">
-          {['MTN', 'IBEDC', 'AIRTEL', 'DSTV', 'GLO'].map((p, i) => (
-            <div key={i} className="partner-logo">{p}</div>
+          {["MTN", "IBEDC", "AIRTEL", "DSTV", "GLO"].map((p, i) => (
+            <div key={i} className="partner-logo">
+              {p}
+            </div>
           ))}
         </div>
       </section>
@@ -393,7 +463,11 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
                   <p className="testimonial-text">{t.text}</p>
                 </div>
                 <div className="testimonial-author">
-                  <img className="author-avatar" src={t.avatar} alt={`${t.name}'s avatar`} />
+                  <img
+                    className="author-avatar"
+                    src={t.avatar}
+                    alt={`${t.name}'s avatar`}
+                  />
                   <div className="author-name">{t.name}</div>
                   <div className="author-role">{t.role}</div>
                 </div>
@@ -405,106 +479,73 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
 
       {/* Pricing */}
       <section id="pricing" className="pricing-section">
-         <div className="section-header">
+        <div className="section-header">
           <h2 className="section-title">EXCLUSIVE DATA PRICES</h2>
-           <div className="title-underline big"></div>
+          <div className="title-underline big"></div>
           <div className="title-underline small"></div>
           <p className="section-description">Our Affordable Data Prices</p>
         </div>
-       {/* <div className="pricing-tabs">
-          {['MTN', 'GLO', 'AIRTEL', '9MOBILE'].map(network => (
-            <button
-              key={network}
-              onClick={() => setActiveTab(network)}
-              className={`pricing-tab ${activeTab === network ? 'active' : ''}`}
-            >
-              {network.toUpperCase()} DATA
-            </button>
+
+        <div className="data-plans-container">
+          {Object.entries(dataPlans).map(([serviceName, plans]) => (
+            <table key={serviceName} className="data-plans-table">
+              <thead>
+                <tr>
+                  <th colSpan="4">{serviceName} Data Plans</th>
+                </tr>
+                <tr>
+                  <th>Data Plan</th>
+                  <th>Price (₦)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {plans.map((plan) => (
+                  <tr key={plan._id}>
+                    <td>
+                      {plan.planName} - {plan.validity}
+                    </td>
+                    <td>{plan.sellingPrice}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           ))}
         </div>
-        <div className="container pricing-grid">
-          {groupedByNetwork[activeTab].map((p, i) => (
-            <div key={i} className="pricing-card">
-              <div className="pricing-header gradient-bg">
-                <div className="pricing-size">{p.size}</div>
-                <div className="pricing-price">{p.price}</div>
-                <div className="pricing-duration">{p.duration}</div>
-              </div>
-              <svg className="pricing-wave" viewBox="0 0 100 15" preserveAspectRatio="none">
-                <path d="M0,0 Q25,15 50,7 T100,0 L100,15 L0,15 Z" fill="white" />
-              </svg>
-              <div className="pricing-body">
-                <button className="pricing-btn gradient-bg">Purchase</button>
-              </div>
-            </div>
-          ))}
-        </div> */}
-
-
-         <div className="data-plans-container">
-      {Object.entries(groupedByNetwork).map(([serviceName, plans]) => (
-        
-          <table key={serviceName} className="data-plans-table">
-            
-            <thead>
-              <tr>
-                <th  colSpan="4">{serviceName} Data Plans</th>
-              
-              </tr>
-              <tr>
-                <th>Data Plan</th>
-                <th>Price (₦)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {plans.map((plan,i) => (
-                <tr key={plan.dataplan_id+i}>
-                  <td>{plan.plan} - {plan.month_validate}</td>
-                  <td>
-                    {plan.plan_amount <= 500
-                    ? Math.ceil(plan.plan_amount * 1.1)
-                    : plan.plan_amount < 1000
-                    ? Math.ceil(plan.plan_amount * 1.1)
-                    : plan.plan_amount <= 3000
-                    ? Math.ceil(plan.plan_amount * 1.08)
-                    : plan.plan_amount <= 5000
-                    ? Math.ceil(plan.plan_amount * 1.05)
-                    : plan.plan_amount <= 12000
-                    ? Math.ceil(plan.plan_amount * 1.06)
-                    : Math.ceil(plan.plan_amount * 1.03)}
-                  </td>
-
-                </tr>
-              ))}
-            </tbody>
-          </table>
-       
-      ))}
-    </div>
- <Link to="/login" className="btn btn-primary">PURCHASE</Link>
-
+        <Link to="/login" className="btn btn-primary">
+          PURCHASE
+        </Link>
       </section>
 
       {/* FAQs */}
       <section id="faqs" className="faq-section">
         <div className="section-header">
           <h2 className="section-title">FREQUENTLY ASKED QUESTIONS</h2>
-           <div className="title-underline big"></div>
+          <div className="title-underline big"></div>
           <div className="title-underline small"></div>
-          <p className="section-description">Get answers to some of the frequently asked questions about our services.</p>
+          <p className="section-description">
+            Get answers to some of the frequently asked questions about our
+            services.
+          </p>
         </div>
         <div className="faq-container">
           <img className="faq-image" src={IT} alt="FAQ" />
           <div className="faq-list">
             {faqs.map((faq, i) => (
               <div key={i} className="faq-item">
-                <button className="faq-question" onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}>
-                  <span>{i + 1}. {faq.q}</span>
-                  <span className={`chevron ${expandedFaq === i ? 'rotate' : ''}`}>▼</span>
+                <button
+                  className="faq-question"
+                  onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
+                >
+                  <span>
+                    {i + 1}. {faq.q}
+                  </span>
+                  <span
+                    className={`chevron ${expandedFaq === i ? "rotate" : ""}`}
+                  >
+                    ▼
+                  </span>
                 </button>
-                {expandedFaq === i && (
-                  <div className="faq-answer">{faq.a}</div>
-                )}
+                {expandedFaq === i && <div className="faq-answer">{faq.a}</div>}
               </div>
             ))}
           </div>
@@ -513,24 +554,28 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
 
       {/* Download App */}
       <section className="download-section">
-      
         <div className="download-container gradient-bg">
           <h2>DOWNLOAD OUR APP</h2>
-           <div className="title-underline big"></div>
+          <div className="title-underline big"></div>
           <div className="title-underline small"></div>
-          <p>Download GEODNATECH Android app, compatible with all devices. Search for GEODNATECH on playstore or click on the button below to download the app on Playstore. Will soon be available on App Store.</p>
+          <p>
+            Download GEODNATECH Android app, compatible with all devices. Search
+            for GEODNATECH on playstore or click on the button below to download
+            the app on Playstore. Will soon be available on App Store.
+          </p>
           <button className="download-btn">available on PLAY STORE</button>
         </div>
-      
       </section>
 
       {/* Contact */}
       <section id="contact" className="contact-section">
         <div className="section-header">
           <h2 className="section-title">GET IN TOUCH</h2>
-            <div className="title-underline big"></div>
+          <div className="title-underline big"></div>
           <div className="title-underline small"></div>
-          <p className="section-description">Get in touch with us through any of the various ways below</p>
+          <p className="section-description">
+            Get in touch with us through any of the various ways below
+          </p>
         </div>
         <div className="contact-grid">
           <div className="contact-card">
@@ -556,13 +601,25 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
         <div className="footer-grid">
           <div className="footer-section">
             <h3>GEODNATECH</h3>
-            <p>GEODNATECH is a company of GEODNATECH Nigeria Limited. We offer best deals when it comes to internet Data Plans, Airtime, Bills payment like GOTV, DSTV & STARTIMES.</p>
+            <p>
+              GEODNATECH is a company of GEODNATECH Nigeria Limited. We offer
+              best deals when it comes to internet Data Plans, Airtime, Bills
+              payment like GOTV, DSTV & STARTIMES.
+            </p>
           </div>
           <div className="footer-section">
             <h4>OUR SERVICES</h4>
             <ul className="footer-links">
-              {['Buy Data', 'Buy Airtime', 'Bill Payment', 'Bulks SMS', 'Cable Subscription'].map((s, i) => (
-                <li key={i}><p>{s}</p></li>
+              {[
+                "Buy Data",
+                "Buy Airtime",
+                "Bill Payment",
+                "Bulks SMS",
+                "Cable Subscription",
+              ].map((s, i) => (
+                <li key={i}>
+                  <p>{s}</p>
+                </li>
               ))}
             </ul>
           </div>
@@ -570,7 +627,9 @@ const groupedByNetwork = allPlans?.reduce((acc, plan) => {
             <h4>USEFUL LINK</h4>
             <ul className="footer-links">
               {footerNavLinks.map((s, i) => (
-                <li key={i}><a href={s.href}>{s.label}</a></li>
+                <li key={i}>
+                  <a href={s.href}>{s.label}</a>
+                </li>
               ))}
             </ul>
           </div>

@@ -1,6 +1,10 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
+
+// const BASE_URL = `http://localhost:5000/api/v1`,
+
+const BASE_URL = `https://vtu-backend-wjn6.onrender.com/api/v1`;
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -14,34 +18,34 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAuth = async () => {
-    const token = localStorage.getItem('token');
-    
+    const token = localStorage.getItem("token");
+
     if (!token) {
       setLoading(false);
       return;
     }
 
     try {
-      console.log('🔵 Checking authentication...');
-      
-      const response = await fetch(`https://vtu-backend-wjn6.onrender.com/api/v1/verify`, {
+      console.log("🔵 Checking authentication...");
+
+      const response = await fetch(`${BASE_URL}/verify`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        }
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       });
 
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
       } else {
-        console.log('⚠️ Token invalid, clearing...');
-        localStorage.removeItem('token');
+        console.log("⚠️ Token invalid, clearing...");
+        localStorage.removeItem("token");
         setUser(null);
       }
     } catch (error) {
-      console.error('❌ Auth check failed:', error);
-      localStorage.removeItem('token');
+      console.error("❌ Auth check failed:", error);
+      localStorage.removeItem("token");
       setUser(null);
     } finally {
       setLoading(false);
@@ -50,96 +54,168 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      console.log('🔵 Registering user...');
-      
-      // const response = await fetch(`http://localhost:5000/api/v1/register`, {
-      const response = await fetch(`https://vtu-backend-wjn6.onrender.com/api/v1/register`, {
-        method: 'POST',
+      console.log("🔵 Registering user...");
+
+      const response = await fetch(`${BASE_URL}/register`, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
       });
 
       const data = await response.json();
 
-      if (response.ok && data.status === 'success') {
-        console.log('✅ Registration successful');
-        localStorage.setItem('token', data.token);
+      console.log(data);
+
+      if (data.status === "success") {
+        console.log("✅ Registration successful");
+
+        localStorage.setItem("token", data.token);
         setUser(data.user);
-        return { success: true, message: 'Registration successful!' };
+        return {
+          status: true,
+          message: "Registration successful!",
+        };
       } else {
-        console.error('❌ Registration failed:', data.message);
-        return { success: false, message: data.message || 'Registration failed' };
+        console.error("❌ Registration failed:", data.message);
+        return {
+          status: false,
+          message: data.message || "Registration failed",
+        };
       }
     } catch (error) {
-      console.error('❌ Registration error:', error);
-      return { success: false, message: error.message };
+      console.error("❌ Registration error:", error);
+      return {
+        status: "error",
+        message: error.message || "Something went wrong",
+      };
     }
   };
 
-  const login = async (email, password) => {
+  const login = async (username, password) => {
     try {
-      console.log('🔵 Logging in...');
-      
-      const response = await fetch(`http://localhost:5000/api/v1/login`, {
-      // const response = await fetch(`https://vtu-backend-wjn6.onrender.com/api/v1/login`, {
-        method: 'POST',
+      console.log("🔵 Logging in...");
+
+      const response = await fetch(`${BASE_URL}/login`, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
 
-      if (response.ok && data.status === 'success') {
-        console.log('✅ Login successful');
-        localStorage.setItem('token', data.token);
+      if (response.ok && data.status === "success") {
+        console.log("✅ Login successful");
+        localStorage.setItem("token", data.token);
         setUser(data.user);
-        return { success: true, user: data.user };
+        return { status: true, user: data.user };
       } else {
-        console.error('❌ Login failed:', data.message);
-        return { success: false, message: data.message || 'Login failed' };
+        console.error("❌ Login failed:", data.message);
+        return { status: false, message: data.message || "Login failed" };
       }
     } catch (error) {
-      console.error('❌ Login error:', error);
-      return { success: false, message: error.message };
+      console.error("❌ Login error:", error);
+      return { status: false, message: error.message };
     }
   };
 
- const logout = () => {
-  console.log('🔵 Logging out...');
+  const requestPasswordReset = async (email) => {
+    try {
+      console.log("🔵 Logging in...");
 
-  try {
-    // Clear auth storage
-    localStorage.removeItem('token');
+      const response = await fetch(`${BASE_URL}/password/reset`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
 
-    // Reset auth state
-    setUser(null);
+      const data = await response.json();
 
-    console.log('✅ Logout successful');
-  } catch (error) {
-    console.error('❌ Logout error:', error);
-  } finally {
-    // Always redirect
-    navigate('/', { replace: true });
-  }
-};
+      if (response.ok && data.status === "success") {
+        console.log("✅ Reset successful");
+        localStorage.setItem("token", response.data.token);
+        setUser(data.user);
+        return { status: true, user: data.user };
+      } else {
+        console.error("❌ Password reset failed:", data.message);
+        return { status: false, message: data.message || "Reset failed" };
+      }
+    } catch (error) {
+      console.error("❌ Password reset error:", error);
+      return { status: false, message: error.message };
+    }
+  };
+
+  const resetPassword = async (password, token) => {
+    try {
+      console.log("🔵 Logging in...");
+
+      const response = await fetch(`${BASE_URL}/password/reset/${token}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.status === "success") {
+        console.log("✅ Reset successful");
+        localStorage.setItem("token", response.data.token);
+        setUser(data.user);
+        return { status: true, user: data.user };
+      } else {
+        console.error("❌ Password reset failed:", data.message);
+        return { status: false, message: data.message || "Reset failed" };
+      }
+    } catch (error) {
+      console.error("❌ Password reset error:", error);
+      return { status: false, message: error.message };
+    }
+  };
+
+  const logout = () => {
+    console.log("🔵 Logging out...");
+
+    try {
+      // Clear auth storage
+      localStorage.removeItem("token");
+
+      // Reset auth state
+      setUser(null);
+
+      console.log("✅ Logout successful");
+    } catch (error) {
+      console.error("❌ Logout error:", error);
+    } finally {
+      // Always redirect
+      navigate("/", { replace: true });
+    }
+  };
 
   const isAuthenticated = () => {
-    return !!user && !!localStorage.getItem('token');
+    return !!user && !!localStorage.getItem("token");
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      login, 
-      register, 
-      logout, 
-      isAuthenticated, 
-      loading 
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        register,
+        resetPassword,
+        requestPasswordReset,
+        logout,
+        isAuthenticated,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

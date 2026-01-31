@@ -1,10 +1,10 @@
 .buy-data-container {
- display: flex;
+  display: flex;
 }
 
-.buy-data-content{
- display: flex;
- flex-direction: column;
+.buy-data-content {
+  display: flex;
+  flex-direction: column;
   margin-left: 280px;
   width: calc(100% - 280px);
 }
@@ -130,10 +130,16 @@
 
 .checkbox-label {
   display: flex;
+  justify-content: flex-start;
   align-items: center;
   gap: 10px;
   cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.checkbox-label label {
   font-size: 14px;
+  font-weight: 600;
   color: #374151;
 }
 
@@ -156,9 +162,16 @@
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
 }
 
 /* Buy Now Button */

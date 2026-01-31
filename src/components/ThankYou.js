@@ -1,24 +1,24 @@
-import React, { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import './ThankYou.css';
+import React, { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import "./ThankYou.css";
 // import  './BuyData.css'
 
-const ThankYou = ({onThankYouPageOpen,onThankYouPageClose,transactionData}) => {
+const ThankYou = ({
+  onThankYouPageOpen,
+  onThankYouPageClose,
+  transactionData,
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log('Location State:', location);
-  
-  
-
-
+  console.log("Location State:", location);
 
   useEffect(() => {
     // Confetti animation on mount
     const duration = 3000;
     const animationEnd = Date.now() + duration;
 
-    const colors = ['#667eea', '#764ba2', '#f093fb', '#4facfe'];
+    const colors = ["#667eea", "#764ba2", "#f093fb", "#4facfe"];
 
     (function frame() {
       const timeLeft = animationEnd - Date.now();
@@ -28,12 +28,13 @@ const ThankYou = ({onThankYouPageOpen,onThankYouPageClose,transactionData}) => {
       const particleCount = 3;
 
       for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'confetti-particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-        particle.style.animationDelay = Math.random() * 0.5 + 's';
-        document.querySelector('.thank-you-container')?.appendChild(particle);
+        const particle = document.createElement("div");
+        particle.className = "confetti-particle";
+        particle.style.left = Math.random() * 100 + "%";
+        particle.style.background =
+          colors[Math.floor(Math.random() * colors.length)];
+        particle.style.animationDelay = Math.random() * 0.5 + "s";
+        document.querySelector(".thank-you-container")?.appendChild(particle);
 
         setTimeout(() => particle.remove(), 3000);
       }
@@ -76,33 +77,43 @@ const ThankYou = ({onThankYouPageOpen,onThankYouPageClose,transactionData}) => {
   //   }
   // };
 
-
-
   return (
-    <div className='popup-overlay'>
-        <div className="thank-you-container">
-      <div className="thank-you-card">
-        {/* Success Animation */}
-        <div className="success-animation">
-          {/* <div className="success-circle">
+    <div className="popup-overlay">
+      <div className="thank-you-container">
+        <div className="thank-you-card">
+          {/* Success Animation */}
+          <div className="success-animation">
+            {/* <div className="success-circle">
             {getTransactionIcon()}
           </div> */}
-          <div className="success-checkmark">
-            <svg width="100" height="100" viewBox="0 0 52 52">
-              <circle className="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-              <path className="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-            </svg>
+            <div className="success-checkmark">
+              <svg width="100" height="100" viewBox="0 0 52 52">
+                <circle
+                  className="checkmark-circle"
+                  cx="26"
+                  cy="26"
+                  r="25"
+                  fill="none"
+                />
+                <path
+                  className="checkmark-check"
+                  fill="none"
+                  d="M14.1 27.2l7.1 7.2 16.7-16.8"
+                />
+              </svg>
+            </div>
           </div>
-        </div>
 
-        {/* Thank You Message */}
-        <div className="thank-you-content">
-          <h1 className="thank-you-title">Thank You!</h1>
-          <p className="thank-you-message">Your transaction was successful.</p>
-        </div>
+          {/* Thank You Message */}
+          <div className="thank-you-content">
+            <h1 className="thank-you-title">Thank You!</h1>
+            <p className="thank-you-message">
+              Your transaction was successful.
+            </p>
+          </div>
 
-        {/* Transaction Details */}
-        {/* <div className="transaction-details">
+          {/* Transaction Details */}
+          {/* <div className="transaction-details">
           <div className="detail-row">
             <span className="detail-label">Transaction Type</span>
             <span className="detail-value">{type}</span>
@@ -147,26 +158,32 @@ const ThankYou = ({onThankYouPageOpen,onThankYouPageClose,transactionData}) => {
           </div>
         </div> */}
 
-        {/* Action Buttons */}
-        <div className="action-buttons">
-          <button 
-            className="btn-primary"
-            onClick={() => navigate('/dashboard')}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-           Back To Dashboard
-          </button>
-          
-          {/* <button 
+          {/* Action Buttons */}
+          <div className="action-buttons">
+            <button
+              className="btn-primary"
+              onClick={() => navigate("/dashboard")}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              Back To Dashboard
+            </button>
+
+            {/* <button 
             className="btn-secondary"
             onClick={() => navigate('/transactions')}
           >
             View Transaction History
           </button> */}
-          
-          {/* <button 
+
+            {/* <button 
             className="btn-outline"
             onClick={() => window.print()}
           >
@@ -177,22 +194,19 @@ const ThankYou = ({onThankYouPageOpen,onThankYouPageClose,transactionData}) => {
             </svg>
             Print Receipt
           </button> */}
-        </div>
+          </div>
 
-        {/* Footer Note */}
-        {/* <div className="thank-you-footer">
+          {/* Footer Note */}
+          {/* <div className="thank-you-footer">
           <p>A confirmation email has been sent to your registered email address.</p>
           <p className="support-text">
             Need help? Contact our <span className="link">support team</span>
           </p>
         </div> */}
-      </div> 
+        </div>
+      </div>
     </div>
-
-    </div>
-  
-  
-  )
+  );
 };
 
 export default ThankYou;

@@ -1,9 +1,14 @@
 import { createContext, useContext, useState, useRef } from "react";
-
+import { useEffect } from "react";
 const WalletContext = createContext();
+
+// const BASE_URL = `http://localhost:5000/api/v1`;
+const BASE_URL = `https://vtu-backend-wjn6.onrender.com/api/v1/`;
 
 export const WalletProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
+  const [totalFunded, setTotalFunded] = useState(0);
+  const [totalSpent, setTotalSpent] = useState(0);
   const [transactions, setTransactions] = useState([]);
   const [dataPlans, setDataPlans] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -12,33 +17,86 @@ export const WalletProvider = ({ children }) => {
 
   const verifyingRef = useRef(false);
 
-  const token = localStorage.getItem("token") || [];
+  const token = localStorage.getItem("token");
 
-  ////////////////////
+  const networkOrder = {
+    MTN: 1,
+    AIRTEL: 2,
+    GLO: 3,
+    "9MOBILE": 4,
+  };
+
+  useEffect(() => {
+    refreshWallet();
+  }, [token]);
+
+  const refreshWallet = async () => {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      console.log("🔵 Checking authentication...");
+
+      const response = await fetch(`${BASE_URL}/wallet/get`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.status === "success") {
+        const wallet = data.data.wallet;
+        console.log("wallet balance", wallet);
+        setBalance(wallet.balance);
+        setTotalFunded(wallet.totalFunded);
+        setTotalSpent(wallet.totalSpent);
+      }
+    } catch (error) {
+      console.error("❌ Auth check failed:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchDataPlans = async () => {
     setLoading(true);
     setError(null);
     try {
-      // const response = await fetch(
-      //   "http://localhost:5000/api/v1/vtu/data-plans",
-      //   {
-      const response = await fetch(
-        "https://vtu-backend-wjn6.onrender.com/api/v1/vtu/data-plans",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${BASE_URL}/vtu/data-plans`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
-      console.log("Fetched data plans:", data);
+
+      console.log("api result", data);
 
       if (data.status === "success") {
         setLoading(false);
-        setDataPlans(data.data);
+
+        const apiData = data.data;
+
+        // Step 1: Group plans by service_name
+        const sortedPlans = apiData.sort((a, b) => {
+          const orderA = networkOrder[a.network?.toUpperCase()] ?? 99;
+          const orderB = networkOrder[b.network?.toUpperCase()] ?? 99;
+
+          return orderA - orderB;
+        });
+
+        const groupedByNetwork = sortedPlans.reduce((acc, plan) => {
+          acc[plan.network] = acc[plan.network] || [];
+          acc[plan.network].push(plan);
+          return acc;
+        }, {});
+
+        setDataPlans(groupedByNetwork);
       }
     } catch (error) {
       console.error("Error fetching data plans:", error);
@@ -48,24 +106,21 @@ export const WalletProvider = ({ children }) => {
 
   const fundWallet = async (amount) => {
     try {
-      const token = localStorage.getItem("token");
+      setLoading(true);
 
-      const res = await fetch(
-        "https://vtu-backend-wjn6.onrender.com/api/v1/wallet/fund",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ amount }),
-        }
-      );
+      const res = await fetch(`${BASE_URL}/wallet/fund`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ amount }),
+      });
 
       const data = await res.json();
       console.log(data);
 
-      if (!res.ok || data.status !== "success") {
+      if (data.status !== "success") {
         throw new Error(data.message || "Payment initialization failed");
       }
 
@@ -86,21 +141,23 @@ export const WalletProvider = ({ children }) => {
 
     try {
       const res = await fetch(
-        // `http://localhost:5000/api/v1/wallet/verify?reference=${reference}`,
-        // {
-        `https://vtu-backend-wjn6.onrender.com/api/v1/wallet/verify?reference=${reference}`,
+        `http://localhost:5000/api/v1/wallet/verify?reference=${reference}`,
         {
+          // `https://vtu-backend-wjn6.onrender.com/api/v1/wallet/verify?reference=${reference}`,
+          // {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       const data = await res.json();
 
       if (!res.ok) throw new Error(data.message);
+
+      // console.log("balance from walletContext", data);
 
       setBalance(data.data.wallet.balance);
       setTransactions((prev) => [data.data.transaction, ...prev]);
@@ -115,27 +172,24 @@ export const WalletProvider = ({ children }) => {
   };
 
   const buyData = async (payload) => {
-    const token = localStorage.getItem("token");
     if (!token) {
       return { success: false, message: "User not authenticated" };
     }
+
+    console.log(payload);
 
     setLoading(true);
     setError(null);
 
     try {
-      const res = await fetch(
-        // 'http://localhost:5000/api/v1/vtu/buy-data',
-        "https://vtu-backend-wjn6.onrender.com/api/v1/vtu/buy-data",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(`${BASE_URL}/vtu/buy-data`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
       const data = await res.json();
 
@@ -166,28 +220,24 @@ export const WalletProvider = ({ children }) => {
   };
 
   const buyAirtime = async (payload) => {
-    const token = localStorage.getItem("token");
     if (!token) {
       return { success: false, message: "User not authenticated" };
     }
+
+    console.log(payload);
 
     setLoading(true);
     setError(null);
 
     try {
-      const res = await fetch(
-        // 'http://localhost:5000/api/v1/vtu/buy-airtime',
-        "https://vtu-backend-wjn6.onrender.com/api/v1/vtu/buy-airtime",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-
+      const res = await fetch(`${BASE_URL}/vtu/buy-airtime`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
       const data = await res.json();
 
       if (!res.ok || data.status !== "success") {
@@ -217,7 +267,6 @@ export const WalletProvider = ({ children }) => {
   };
 
   const meterValidation = async (payload) => {
-    const token = localStorage.getItem("token");
     if (!token) {
       return { success: false, message: "User not authenticated" };
     }
@@ -226,18 +275,14 @@ export const WalletProvider = ({ children }) => {
     setError(null);
 
     try {
-      const res = await fetch(
-        // "http://localhost:5000/api/v1/vtu/validate-meter",
-        "https://vtu-backend-wjn6.onrender.com/api/v1/vtu/validate-meter",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(`${BASE_URL}/vtu/validate-meter`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
       const data = await res.json();
 
@@ -265,7 +310,6 @@ export const WalletProvider = ({ children }) => {
   };
 
   const meterRecharge = async (payload) => {
-    const token = localStorage.getItem("token");
     if (!token) {
       return { success: false, message: "User not authenticated" };
     }
@@ -274,18 +318,14 @@ export const WalletProvider = ({ children }) => {
     setError(null);
 
     try {
-      const res = await fetch(
-        // "http://localhost:5000/api/v1/vtu/recharge-meter",
-        "https://vtu-backend-wjn6.onrender.com/api/v1/vtu/recharge-meter",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(`${BASE_URL}/vtu/recharge-meter`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
       const data = await res.json();
 
@@ -318,7 +358,6 @@ export const WalletProvider = ({ children }) => {
   };
 
   const cableValidation = async (payload) => {
-    const token = localStorage.getItem("token");
     if (!token) {
       return { success: false, message: "User not authenticated" };
     }
@@ -327,18 +366,14 @@ export const WalletProvider = ({ children }) => {
     setError(null);
 
     try {
-      const res = await fetch(
-        // "http://localhost:5000/api/v1/vtu/validate-cable",
-        "https://vtu-backend-wjn6.onrender.com/api/v1/vtu/validate-cable",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(`${BASE_URL}/vtu/validate-cable`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
       const data = await res.json();
 
@@ -366,7 +401,6 @@ export const WalletProvider = ({ children }) => {
   };
 
   const cableRecharge = async (payload) => {
-    const token = localStorage.getItem("token");
     if (!token) {
       return { success: false, message: "User not authenticated" };
     }
@@ -375,18 +409,14 @@ export const WalletProvider = ({ children }) => {
     setError(null);
 
     try {
-      const res = await fetch(
-        // "http://localhost:5000/api/v1/vtu/recharge-cable",
-        "https://vtu-backend-wjn6.onrender.com/api/v1/vtu/recharge-cable",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(`${BASE_URL}/vtu/recharge-cable`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
       const data = await res.json();
 
@@ -418,10 +448,60 @@ export const WalletProvider = ({ children }) => {
     }
   };
 
+  const upgradeToReseller = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        throw new Error("Authentication required");
+      }
+
+      const response = await fetch(`${BASE_URL}/wallet/upgrade`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      console.log("✅ Upgrade response:", data);
+
+      if (!response.ok || data.status !== "success") {
+        throw new Error(data.message || "Upgrade failed");
+      }
+
+      // Update wallet state
+      setBalance(data.data.walletBalance);
+
+      // Update user role in localStorage if you store it
+      const userData = JSON.parse(localStorage.getItem("user") || "{}");
+      userData.role = "reseller";
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      return {
+        success: true,
+        result: data.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <WalletContext.Provider
       value={{
         balance,
+        totalFunded,
+        totalSpent,
         transactions,
         loading,
         error,
@@ -435,6 +515,7 @@ export const WalletProvider = ({ children }) => {
         meterRecharge,
         cableValidation,
         cableRecharge,
+        upgradeToReseller,
       }}
     >
       {children}

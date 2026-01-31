@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SideBar from "../SideBar";
 import Header from "../Header";
 import { useWallet } from "../walletContext";
-import { capitalize } from "../utils/FormatCurrency";
+import { capitalize } from "../../utils/helperFunctions";
 
 import "../BuyData.css";
 
@@ -168,6 +168,8 @@ const EnergyMeter = () => {
         customerAddress: "",
       });
     } else {
+      setLoading(false);
+      setError(result.message);
       return;
     }
   };

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import SideBar from "../SideBar";
 import Header from "../Header";
 import { useWallet } from "../walletContext";
-import { capitalize } from "../utils/FormatCurrency";
 
 import "../BuyData.css";
 

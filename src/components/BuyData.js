@@ -1,374 +1,266 @@
-import React, { useState, useEffect } from 'react';
-import {useWallet} from './walletContext'
-import { useNavigate } from 'react-router-dom';
-import SideBar from './SideBar';
-import Header from './Header';
-
-import './BuyData.css';
-
-const applyResellerPrice = (amount) => {
-  if (amount <= 500) return Math.ceil(amount * 1.2);
-  if (amount < 1000) return Math.ceil(amount * 1.1);
-  if (amount <= 3000) return Math.ceil(amount * 1.08);
-  if (amount <= 5000) return Math.ceil(amount * 1.05);
-  if (amount <= 12000) return Math.ceil(amount * 1.06);
-  return Math.ceil(amount * 1.03);
-};
+import React, { useState, useMemo, useEffect } from "react";
+import { useWallet } from "./walletContext";
+import { useNavigate } from "react-router-dom";
+import SideBar from "./SideBar";
+import Header from "./Header";
+import "./BuyData.css";
 
 const BuyData = () => {
-  const [formData, setFormData] = useState({
-    network: '',
-    dataType: '',
-    dataPlan: '',
-    mobileNumber: '',
-    amount: '',
-    bypassValidator: false
-  });
-  const [availablePlans, setAvailablePlans] = useState([]);
-  const [selectedPlanDetails, setSelectedPlanDetails] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const {dataPlans,buyData} = useWallet()
   const navigate = useNavigate();
+  const {
+    dataPlans,
+    buyData,
+    loading: walletLoading,
+    fetchDataPlans,
+  } = useWallet();
 
-  // Close on escape key
-  // useEffect(() => {
-  //   const handleEscape = (e) => {
-  //     if (e.key === 'Escape') onClose();
-  //   };
-
-  //   if (isOpen) {
-  //     document.addEventListener('keydown', handleEscape);
-  //     document.body.style.overflow = 'hidden';
-  //   }
-
-  //   return () => {
-  //     document.removeEventListener('keydown', handleEscape);
-  //     document.body.style.overflow = 'unset';
-  //   };
-  // }, [isOpen, onClose]);
-
- // Update available plans when network or dataType changes
- useEffect(() => {
-  if (!formData.network || !formData.dataType) {
-    setAvailablePlans([]);
-    return;
-  }
-
-  const plans =
-    dataPlans[formData.network]?.[formData.dataType] || [];
-
-  const resellerPlans = plans.map((plan) => ({
-    ...plan,
-    plan_amount: applyResellerPrice(plan.plan_amount),
-  }));
-
-  setAvailablePlans(resellerPlans);
-  setSelectedPlanDetails(null);
-
-  setFormData((prev) => ({
-    ...prev,
-    dataPlan: '',
-    amount: '',
-  }));
-}, [formData.network, formData.dataType,dataPlans]);
-
-
-  // Update amount when data plan changes
   useEffect(() => {
-    if (formData.dataPlan && formData.network && formData.dataType) {
-      const plans = dataPlans[formData.network]?.[formData.dataType] || [];
-      const selectedPlan = plans.find(plan => plan.id === Number(formData.dataPlan));
+    fetchDataPlans();
+  }, []);
 
-      const selectedResellerPlans = {
-        ...selectedPlan,
-        plan_amount: selectedPlan.plan_amount <= 500 
-        ? Math.ceil(selectedPlan.plan_amount * 1.2) : selectedPlan.plan_amount < 1000 
-        ? Math.ceil(selectedPlan.plan_amount * 1.1) : selectedPlan.plan_amount <= 3000 
-        ? Math.ceil(selectedPlan.plan_amount * 1.08) : selectedPlan.plan_amount <= 5000
-        ? Math.ceil(selectedPlan.plan_amount * 1.05) : selectedPlan.plan_amount <= 12000
-        ? Math.ceil(selectedPlan.plan_amount * 1.06) : Math.ceil(selectedPlan.plan_amount * 1.03)
-      };
+  // console.log("data plans for buy data", dataPlans);
 
-      if (selectedResellerPlans) {
-        setSelectedPlanDetails(selectedResellerPlans);
-        setFormData(prev => ({
-          ...prev,
-          amount: selectedResellerPlans.plan_amount
-        }));
-      }
-    }
-  }, [formData.dataPlan, formData.network, formData.dataType,dataPlans]);
+  const [formData, setFormData] = useState({
+    network: "",
+    dataType: "",
+    dataPlan: "",
+    mobileNumber: "",
+    bypassValidator: false,
+  });
 
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  // Update amount when data plan changes
-useEffect(() => {
-  if (!formData.dataPlan) return;
+  /* -----------------------------
+     DERIVED DATA (SAFE)
+ ------------------------------ */
 
-  const selected = availablePlans.find(
-    (p) => p.id === Number(formData.dataPlan)
-  );
+  const plansReady =
+    dataPlans && Object.keys(dataPlans).length > 0 && !walletLoading;
 
-  if (!selected) return;
+  const normalizedNetwork = formData.network?.toUpperCase();
 
-  setSelectedPlanDetails(selected);
-  setFormData((prev) => ({
-    ...prev,
-    amount: selected.plan_amount,
-  }));
-}, [formData.dataPlan, availablePlans, dataPlans]);
+  const availablePlans = useMemo(() => {
+    if (!plansReady || !normalizedNetwork || !formData.dataType) return [];
 
+    const networkPlans = dataPlans[normalizedNetwork];
+
+    if (!Array.isArray(networkPlans)) return [];
+
+    return networkPlans.filter((plan) => plan.planType === formData.dataType);
+  }, [plansReady, normalizedNetwork, formData.dataType, dataPlans]);
+
+  const selectedPlan = useMemo(() => {
+    if (!formData.dataPlan) return null;
+
+    return availablePlans.find(
+      (p) => String(p.providerPlanId) === String(formData.dataPlan)
+    );
+  }, [formData.dataPlan, availablePlans]);
+
+  /* -----------------------------
+     RESET DEPENDENCIES
+  ------------------------------ */
+
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      dataPlan: "",
+    }));
+  }, [formData.network, formData.dataType]);
+
+  /* -----------------------------
+     HANDLERS
+  ------------------------------ */
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
-    // Validation
-    if (!formData.network) {
-      setError('Please select a network');
+    if (!selectedPlan) {
+      setError("Please select a valid data plan");
       return;
     }
-    if (!formData.dataType) {
-      setError('Please select a data type');
-      return;
-    }
-    if (!formData.dataPlan) {
-      setError('Please select a data plan');
-      return;
-    }
+
     if (!formData.mobileNumber) {
-      setError('Please enter mobile number');
-      return;
-    }
-
- if (!selectedPlanDetails) {
-      setError('Invalid data selected');
+      setError("Please enter mobile number");
       return;
     }
 
     const payload = {
-    network:Number(selectedPlanDetails.network),
-    mobile_number:formData.mobileNumber,
-    plan:selectedPlanDetails.id,
-    amount:formData.amount,
-    Ported_number:true
-}
+      network: Number(selectedPlan.providerNetworkId),
+      plan: Number(selectedPlan.providerPlanId),
+      mobile_number: formData.mobileNumber,
+      amount: selectedPlan.sellingPrice,
+      Ported_number: true,
+    };
 
-    setLoading(true);
-
-    // TODO: Call your API here
-    console.log('Buying data with:', {
-      ...formData,
-      planDetails: selectedPlanDetails
-    });
+    setSubmitting(true);
 
     const result = await buyData(payload);
 
-    console.log('Buy data result:', result);
-
-    if (result.success) {
-      setLoading(false);
-      setError(false);
-      navigate('/success', { replace: true } );
+    if (result?.success) {
+      navigate("/success", { replace: true });
+    } else {
+      setError(result?.message || "Transaction failed");
     }
+
+    setSubmitting(false);
   };
 
+  /* -----------------------------
+    UI
+ ------------------------------ */
 
   return (
     <div className="buy-data-container">
       <SideBar />
-      <div className="buy-data-content"> 
-        <Header/>
+      <div className="buy-data-content">
+        <Header />
+
         <div className="popup-container">
+          <h2 className="popup-title">Buy Data Plan</h2>
 
-        <h2 className="popup-title">Buy Data Plan</h2>
+          {!plansReady && (
+            <div className="loading-banner">
+              ⏳ Loading available data plans...
+            </div>
+          )}
 
-        <form onSubmit={handleSubmit} className="popup-form">
-          <div className="form-row">
-            {/* Left Column - Form */}
-            <div className="form-column">
-              {error && (
-                <div className="form-error">
-                  {error}
-                </div>
-              )}
-
-              {/* Network */}
-              <div className="form-group">
-                <label htmlFor="network">
-                  Network<span className="required">*</span>
-                </label>
-                <select
-                  id="network"
-                  name="network"
-                  value={formData.network}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">-- Select Network --</option>
-                  <option value="MTN_PLAN">MTN_PLAN</option>
-                  <option value="AIRTEL_PLAN">AIRTEL_PLAN</option>
-                  <option value="GLO_PLAN">GLO_PLAN</option>
-                  <option value="9MOBILE_PLAN">9MOBILE_PLAN</option>
-                </select>
-              </div>
-
-              {/* Data Type */}
-              <div className="form-group">
-                <label htmlFor="dataType">
-                  Data Type<span className="required">*</span>
-                </label>
-                <select
-                  id="dataType"
-                  name="dataType"
-                  value={formData.dataType}
-                  onChange={handleChange}
-                  disabled={!formData.network}
-                  required
-                >
-                  <option value="">-- Select Data Type --</option>
-                  <option value="SME">SME</option>
-                  <option value="GIFTING">GIFTING</option>
-                  <option value="CORPORATE_GIFTING">CORPORATE GIFTING</option>
-                  <option value="DATA_SHARE">DATA SHARE</option>
-                </select>
-                <small className="form-hint">
-                  Select Plan Type: SME, GIFTING, CORPORATE GIFTING, or DATA SHARE
-                </small>
-              </div>
-
-              {/* Data Plan */}
-              <div className="form-group">
-                <label htmlFor="dataPlan">
-                  Data Plan<span className="required">*</span>
-                </label>
-                <select
-                  id="dataPlan"
-                  name="dataPlan"
-                  value={formData.dataPlan}
-                  onChange={handleChange}
-                  disabled={!formData.dataType || availablePlans.length === 0}
-                  required
-                >
-                  <option value="">-- Select Data Plan --</option>
-                  {availablePlans.map(plan => (
-                    <option key={plan.id} value={plan.id}>
-                      {plan.plan} - ₦{plan.plan_amount} ({plan.month_validate})
-                    </option>
-                  ))}
-                </select>
-                {availablePlans.length === 0 && formData.dataType && (
-                  <small className="form-hint text-warning">
-                    No plans available for selected data type
-                  </small>
-                )}
-              </div>
-
-              {/* Mobile Number */}
-              <div className="form-group">
-                <label htmlFor="mobileNumber">
-                  Mobile Number<span className="required">*</span>
-                </label>
-                <input
-                  type="tel"
-                  id="mobileNumber"
-                  name="mobileNumber"
-                  value={formData.mobileNumber}
-                  onChange={handleChange}
-                  placeholder="08012345678"
-                  maxLength="11"
-                  required
-                />
-              </div>
-
-              {/* Amount (Read-only) */}
-              <div className="form-group">
-                <label htmlFor="amount">
-                  Amount (₦)<span className="required">*</span>
-                </label>
-                <input
-                  type="number"
-                  id="amount"
-                  name="amount"
-                  value={formData.amount}
-                  readOnly
-                  className="readonly-input"
-                  placeholder="Select a plan to see amount"
-                />
-                {selectedPlanDetails && (
-                  <small className="form-hint text-success">
-                    ✓ {selectedPlanDetails.plan} - Valid for {selectedPlanDetails.month_validate}
-                  </small>
-                )}
-              </div>
-
-              {/* Bypass Validator */}
-              <div className="form-group checkbox-group">
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    name="bypassValidator"
-                    checked={formData.bypassValidator}
+          <form onSubmit={handleSubmit} className="popup-form">
+            <div className="form-row">
+              {/* Left Column - Form */}
+              <div className="form-column">
+                {error && <div className="form-error">{error}</div>}
+                {/* NETWORK */}
+                <div className="form-group">
+                  <label>Network *</label>
+                  <select
+                    name="network"
+                    value={formData.network}
                     onChange={handleChange}
+                    disabled={!plansReady}
+                  >
+                    <option value="">-- Select Network --</option>
+                    <option value="MTN">MTN</option>
+                    <option value="AIRTEL">AIRTEL</option>
+                    <option value="GLO">GLO</option>
+                    <option value="9MOBILE">9MOBILE</option>
+                  </select>
+                </div>
+                {/* DATA TYPE */}
+                <div className="form-group">
+                  <label>Data Type *</label>
+                  <select
+                    name="dataType"
+                    value={formData.dataType}
+                    onChange={handleChange}
+                    disabled={!formData.network || !plansReady}
+                  >
+                    <option value="">-- Select Data Type --</option>
+                    <option value="SME">SME</option>
+                    <option value="GIFTING">GIFTING</option>
+                    <option value="CORPORATE_GIFTING">CORPORATE GIFTING</option>
+                    <option value="DATA_SHARE">DATA SHARE</option>
+                  </select>
+                </div>
+                {/* DATA PLAN */}
+                <div className="form-group">
+                  <label>Data Plan *</label>
+                  <select
+                    name="dataPlan"
+                    value={formData.dataPlan}
+                    onChange={handleChange}
+                    disabled={availablePlans.length === 0}
+                  >
+                    <option value="">-- Select Data Plan --</option>
+                    {availablePlans.map((plan) => (
+                      <option
+                        key={plan.providerPlanId}
+                        value={plan.providerPlanId}
+                      >
+                        {plan.planName} - ₦{plan.sellingPrice} ({plan.validity})
+                        {plan.planType}
+                      </option>
+                    ))}
+                  </select>
+
+                  {formData.dataType && availablePlans.length === 0 && (
+                    <small className="text-warning">
+                      No plans available for this selection
+                    </small>
+                  )}
+                </div>
+                {/* MOBILE */}
+                <div className="form-group">
+                  <label>Mobile Number *</label>
+                  <input
+                    type="tel"
+                    name="mobileNumber"
+                    value={formData.mobileNumber}
+                    onChange={handleChange}
+                    maxLength="11"
                   />
-                  <span>Bypass number validator</span>
-                </label>
+                </div>
+                {/* AMOUNT */}
+                <div className="form-group">
+                  <label>Amount (₦)</label>
+                  <input readOnly value={selectedPlan?.sellingPrice || ""} />
+                </div>
+                <button
+                  type="submit"
+                  disabled={!selectedPlan || submitting}
+                  className="btn-buy-now"
+                >
+                  {submitting
+                    ? "Processing..."
+                    : `Buy Now ₦${selectedPlan?.sellingPrice || 0}`}
+                </button>
               </div>
 
-              {/* Submit Button */}
-              <button 
-                type="submit" 
-                className="btn-buy-now"
-                disabled={loading || !formData.amount}
-              >
-                {loading ? 'Processing...' : `Buy Now - ₦${formData.amount || '0'}`}
-              </button>
-            </div>
-
-            {/* Right Column - Info */}
-            <div className="info-column">
-              <h3 className="info-title">Codes for Data Balance:</h3>
-              <div className="info-cards">
-                <div className="info-card mtn">
-                  <strong>MTN [SME]</strong> *461*4#
-                </div>
-                <div className="info-card mtn">
-                  <strong>MTN [Gifting]</strong> *323#
-                </div>
-                <div className="info-card mtn">
-                  <strong>MTN [Corporate Gifting]</strong> *323*1#
-                </div>
-                <div className="info-card mtn">
-                  <strong>MTN [data coupon]</strong> send 2 to 312 as a text, it's called promo data
-                </div>
-                <div className="info-card nine-mobile">
-                  <strong>9mobile [C.G and Gifting]</strong> *323#
-                </div>
-                <div className="info-card airtel">
-                  <strong>Airtel [Gifting]</strong> *323#
-                </div>
-                <div className="info-card airtel">
-                  <strong>Airtel [C.G.]</strong> *323#. it's called edu data.
-                </div>
-                <div className="info-card glo">
-                  <strong>Glo [C.G and Gifting]</strong> *323#
+              {/* Right Column - Info */}
+              <div className="info-column">
+                <h3 className="info-title">Codes for Data Balance:</h3>
+                <div className="info-cards">
+                  <div className="info-card mtn">
+                    <strong>MTN [SME]</strong> *461*4#
+                  </div>
+                  <div className="info-card mtn">
+                    <strong>MTN [Gifting]</strong> *323#
+                  </div>
+                  <div className="info-card mtn">
+                    <strong>MTN [Corporate Gifting]</strong> *323*1#
+                  </div>
+                  <div className="info-card mtn">
+                    <strong>MTN [data coupon]</strong> send 2 to 312 as a text,
+                    it's called promo data
+                  </div>
+                  <div className="info-card nine-mobile">
+                    <strong>9mobile [C.G and Gifting]</strong> *323#
+                  </div>
+                  <div className="info-card airtel">
+                    <strong>Airtel [Gifting]</strong> *323#
+                  </div>
+                  <div className="info-card airtel">
+                    <strong>Airtel [C.G.]</strong> *323#. it's called edu data.
+                  </div>
+                  <div className="info-card glo">
+                    <strong>Glo [C.G and Gifting]</strong> *323#
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-      </div>
-      
     </div>
   );
 };

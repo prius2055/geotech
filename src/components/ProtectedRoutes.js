@@ -1,9 +1,9 @@
-import React from 'react';
-import { Navigate } from 'react-router';
-import { useAuth } from './authContext';
-import Loading from './Loading';
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "./authContext";
+import Loading from "./Loading";
 
-const ProtectedRoutes = ({ children }) => {
+const ProtectedRoutes = () => {
   const { user, loading } = useAuth();
 
   // Show loading while checking authentication
@@ -13,13 +13,13 @@ const ProtectedRoutes = ({ children }) => {
 
   // If not authenticated, redirect to login
   if (!user) {
-    console.log('❌ Not authenticated, redirecting to login');
-    return <Navigate to="/login" replace />;
+    console.log("❌ Not authenticated, redirecting to login");
+    return <Navigate to="/" replace />;
   }
 
   // User is authenticated, render the protected content
-  console.log('✅ User authenticated, rendering protected content');
-  return children;
+  console.log("✅ User authenticated, rendering protected content");
+  return <Outlet />;
 };
 
 export default ProtectedRoutes;
