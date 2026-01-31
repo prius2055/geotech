@@ -10,7 +10,7 @@ import { useEffect } from "react";
 const WalletContext = createContext();
 
 // const BASE_URL = `http://localhost:5000/api/v1`;
-const BASE_URL = `https://vtu-backend-wjn6.onrender.com/api/v1/`;
+const BASE_URL = `https://vtu-backend-wjn6.onrender.com/api/v1`;
 
 export const WalletProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
