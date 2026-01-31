@@ -61,9 +61,9 @@ export const WalletProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, []);
 
-  const fetchDataPlans = async () => {
+  const fetchDataPlans = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -103,7 +103,7 @@ export const WalletProvider = ({ children }) => {
       console.error("Error fetching data plans:", error);
       setError("Failed to fetch data plans");
     }
-  };
+  }, []);
 
   const fundWallet = async (amount) => {
     try {
