@@ -27,7 +27,7 @@ export const WalletProvider = ({ children }) => {
 
   useEffect(() => {
     refreshWallet();
-  }, [token, refreshWallet]);
+  }, [token]);
 
   const refreshWallet = async () => {
     if (!token) {

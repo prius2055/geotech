@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/authContext";
 import Sidebar from "../components/SideBar";
 import Header from "../components/Header";
@@ -44,7 +44,7 @@ const RequestPasswordReset = () => {
       if (result?.status === "success" || result?.status) {
         console.log("✅ Password request email sent");
         setError("");
-        setSuccess(true);
+        // setSuccess(true);
 
         // Don't auto-redirect, let user read the success message
         // setTimeout(() => {

@@ -20,7 +20,7 @@ const UserTransactions = () => {
 
   useEffect(() => {
     syncTransactions();
-  }, [page, syncTransactions]);
+  }, [page]);
 
   const syncTransactions = async () => {
     const token = localStorage.getItem("token");
