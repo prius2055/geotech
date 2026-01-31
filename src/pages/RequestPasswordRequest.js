@@ -7,12 +7,9 @@ import Header from "../components/Header";
 import "./RequestPasswordReset.css";
 
 const RequestPasswordReset = () => {
-  const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
 
   const { requestPasswordReset } = useAuth();
 

@@ -13,7 +13,6 @@ export const WalletProvider = ({ children }) => {
   const [dataPlans, setDataPlans] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [discoDetail, setDiscoDetail] = useState(null);
 
   const verifyingRef = useRef(false);
 
@@ -28,7 +27,7 @@ export const WalletProvider = ({ children }) => {
 
   useEffect(() => {
     refreshWallet();
-  }, [token]);
+  }, [token, refreshWallet]);
 
   const refreshWallet = async () => {
     if (!token) {

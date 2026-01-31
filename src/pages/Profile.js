@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useAuth } from "../components/authContext";
 import { useWallet } from "../components/walletContext";
 import SideBar from "../components/SideBar";

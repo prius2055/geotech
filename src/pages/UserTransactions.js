@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import SideBar from "../components/SideBar";
 import Header from "../components/Header";
-// import { useNavigate } from "react-router";
 import "./ServiceManagement.css";
+
+// const BASE_URL = "http://localhost:5000/api/v1";
+const BASE_URL = "https://vtu-backend-wjn6.onrender.com/api/v1";
 
 const UserTransactions = () => {
   const [transactions, setTransactions] = useState([]);
@@ -18,7 +20,7 @@ const UserTransactions = () => {
 
   useEffect(() => {
     syncTransactions();
-  }, [page]);
+  }, [page, syncTransactions]);
 
   const syncTransactions = async () => {
     const token = localStorage.getItem("token");
@@ -27,11 +29,8 @@ const UserTransactions = () => {
     setError(null);
     try {
       const response = await fetch(
-        `http://localhost:5000/api/v1/transactions?page=${page}&limit=${limit}`,
+        `${BASE_URL}/transactions?page=${page}&limit=${limit}`,
         {
-          // const response = await fetch(
-          //   `https://vtu-backend-wjn6.onrender.com/api/v1/transactions?page=${page}&limit=${limit}`,
-          //   {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

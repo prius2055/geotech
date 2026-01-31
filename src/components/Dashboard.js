@@ -10,13 +10,6 @@ import ServiceTable from "./ServiceTable";
 
 import "./Dashboard.css";
 
-const networkOrder = {
-  MTN: 1,
-  AIRTEL: 2,
-  GLO: 3,
-  "9MOBILE": 4,
-};
-
 const Dashboard = () => {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
@@ -62,7 +55,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchDataPlans();
-  }, []);
+  }, [fetchDataPlans]);
 
   const handleUpgradeClick = () => {
     setShowUpgradeModal(true);
