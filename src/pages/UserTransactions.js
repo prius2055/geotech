@@ -19,39 +19,38 @@ const UserTransactions = () => {
   // const navigate = useNavigate();
 
   useEffect(() => {
-    syncTransactions();
-  }, [page]);
-
-  const syncTransactions = async () => {
-    const token = localStorage.getItem("token");
-    // console.log(token);
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(
-        `${BASE_URL}/transactions?page=${page}&limit=${limit}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+    const syncTransactions = async () => {
+      const token = localStorage.getItem("token");
+      // console.log(token);
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(
+          `${BASE_URL}/transactions?page=${page}&limit=${limit}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           },
-        },
-      );
-      const result = await response.json();
+        );
+        const result = await response.json();
 
-      console.log(result);
+        console.log(result);
 
-      if (result.status === "success") {
-        setTransactions(result.data);
-        setTotalPages(result.meta.totalPages);
-        setLoading(false);
+        if (result.status === "success") {
+          setTransactions(result.data);
+          setTotalPages(result.meta.totalPages);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching data plans:", error);
+        setError("Failed to fetch data plans");
       }
-    } catch (error) {
-      console.error("Error fetching data plans:", error);
-      setError("Failed to fetch data plans");
-    }
-  };
+    };
+    syncTransactions();
+  }, [page, limit]);
 
   return (
     <div className="service-container">
