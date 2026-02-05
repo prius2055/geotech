@@ -8,7 +8,7 @@ import Mojeed from "../img/mojeed.jpg";
 import Tenny from "../img/tenny.jpg";
 import IT from "../img/IT.jpg";
 
-import "./Homepage.css";
+import "./Homepage2.css";
 
 const Homepage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -18,6 +18,10 @@ const Homepage = () => {
     document
       .getElementById(section.toLowerCase())
       ?.scrollIntoView({ behavior: "smooth" });
+    setMobileMenuOpen(false);
+  };
+
+  const closeMobileMenu = () => {
     setMobileMenuOpen(false);
   };
 
@@ -39,7 +43,7 @@ const Homepage = () => {
     {
       icon: "🚀",
       title: "WE'RE FAST",
-      desc: "GEODNATECH lets you purchase mobile data, top up airtime, pay your cable and electricity bills e.t.c all at the speed of light.",
+      desc: "VTVend lets you purchase mobile data, top up airtime, pay your cable and electricity bills e.t.c all at the speed of light.",
     },
     {
       icon: "🛡️",
@@ -72,7 +76,7 @@ const Homepage = () => {
     {
       icon: "📱",
       title: "AIRTIME TOPUP",
-      desc: "Making an online recharge has become very easy and safe on GEODNATECH.",
+      desc: "Making an online recharge has become very easy and safe on VTVend.",
     },
     {
       icon: "💵",
@@ -104,7 +108,7 @@ const Homepage = () => {
       name: "I.T-Guy",
       role: "UI / UX Designer",
       avatar: IT,
-      text: '"This site is great... All thanks to geodnatech.com. I can really say that since I joined this site I have been earning more than before..."',
+      text: '"This site is great... All thanks to VTVend.com. I can really say that since I joined this site I have been earning more than before..."',
     },
     {
       name: "Tenny",
@@ -148,7 +152,9 @@ const Homepage = () => {
       {/* Navigation */}
       <nav className="nav gradient-bg">
         <div className="nav-container">
-          <div className="logo">GEODNATECH</div>
+          <div className="logo">VTvend</div>
+
+          {/* Desktop Nav */}
           <ul className="nav-links desktop-only">
             {navLinks.map((link) => (
               <li key={link}>
@@ -156,6 +162,8 @@ const Homepage = () => {
               </li>
             ))}
           </ul>
+
+          {/* Desktop Buttons */}
           <div className="nav-buttons desktop-only">
             <Link to="/login" className="btn btn-outline">
               LOGIN
@@ -164,12 +172,45 @@ const Homepage = () => {
               REGISTER
             </Link>
           </div>
+
+          {/* Mobile Menu Button */}
           <button
-            className="mobile-menu-btn mobile-only"
+            className="mobile-menu-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
           >
             {mobileMenuOpen ? "✕" : "☰"}
           </button>
+        </div>
+
+        {/* Mobile Menu */}
+        <div className={`mobile-menu ${mobileMenuOpen ? "open" : ""}`}>
+          <div className="mobile-menu-overlay" onClick={closeMobileMenu}></div>
+          <div className="mobile-menu-content">
+            <ul className="mobile-nav-links">
+              {navLinks.map((link) => (
+                <li key={link}>
+                  <p onClick={() => scrollToSection(link)}>{link}</p>
+                </li>
+              ))}
+            </ul>
+            <div className="mobile-nav-buttons">
+              <Link
+                to="/login"
+                className="btn btn-outline"
+                onClick={closeMobileMenu}
+              >
+                LOGIN
+              </Link>
+              <Link
+                to="/signup"
+                className="btn btn-primary"
+                onClick={closeMobileMenu}
+              >
+                REGISTER
+              </Link>
+            </div>
+          </div>
         </div>
       </nav>
 
@@ -177,11 +218,11 @@ const Homepage = () => {
       <section id="home" className="hero gradient-bg">
         <div className="hero-container">
           <div className="hero-text">
-            <h1>WELCOME TO GEODNATECH</h1>
+            <h1>WELCOME TO VTVend</h1>
             <p>
-              GEODNATECH is a company of GEODNATECH Nigeria Limited. We offer
-              best deals when it comes to internet Data Plans, Airtime, Bills
-              payment like GOTV, DSTV & STARTIMES.
+              VTVend is a company of VTVend Nigeria Limited. We offer best deals
+              when it comes to internet Data Plans, Airtime, Bills payment like
+              GOTV, DSTV & STARTIMES.
             </p>
             <div className="hero-buttons">
               <Link to="/login" className="btn btn-outline">
@@ -193,7 +234,7 @@ const Homepage = () => {
             </div>
           </div>
 
-          <img src={MobilePhone} alt="A mobile phone" />
+          <img src={MobilePhone} alt="A mobile phone" className="hero-image" />
         </div>
         <svg className="hero-wave" viewBox="0 0 1440 320">
           <path
@@ -220,17 +261,17 @@ const Homepage = () => {
           <div className="title-underline small"></div>
         </div>
         <p className="section-description">
-          GEODNATECH is a registered telecommunication vendor known for
-          providing internet services, airtime VTU, cable TV subscriptions,
-          electricity payment, converting airtime to cash, bitcoin buying and
-          selling, and selling of UK used phones at affordable prices.
+          VTVend is a registered telecommunication vendor known for providing
+          internet services, airtime VTU, cable TV subscriptions, electricity
+          payment, converting airtime to cash, bitcoin buying and selling, and
+          selling of UK used phones at affordable prices.
         </p>
         <div className="container about-grid">
           <div className="about-content">
-            <h3>BEST TELECOMMUNICATION COMPANY</h3>
+            <h3>RELIABLE TELECOMMUNICATION COMPANY</h3>
             <div className="content-underline"></div>
             <p>
-              GEODNATECH also gives people the opportunity of becoming their
+              VTVend also gives people the opportunity of becoming their
               reseller and be making money on hourly and daily basis so as to
               boost their financial status.
             </p>
@@ -247,7 +288,7 @@ const Homepage = () => {
                     <span className="check-icon">✓</span>
                     <span>{item}</span>
                   </div>
-                )
+                ),
               )}
             </div>
           </div>
@@ -291,8 +332,8 @@ const Homepage = () => {
           <div className="title-underline big"></div>
           <div className="title-underline small"></div>
           <p className="section-description">
-            Here at GEODNATECH our services are completely Fast, Secure &
-            Automated. We provide 24/7 Support to our registered users.
+            Here at VTVend our services are completely Fast, Secure & Automated.
+            We provide 24/7 Support to our registered users.
           </p>
         </div>
 
@@ -558,9 +599,9 @@ const Homepage = () => {
           <div className="title-underline big"></div>
           <div className="title-underline small"></div>
           <p>
-            Download GEODNATECH Android app, compatible with all devices. Search
-            for GEODNATECH on playstore or click on the button below to download
-            the app on Playstore. Will soon be available on App Store.
+            Download VTVend Android app, compatible with all devices. Search for
+            VTVend on playstore or click on the button below to download the app
+            on Playstore. Will soon be available on App Store.
           </p>
           <button className="download-btn">available on PLAY STORE</button>
         </div>
@@ -580,17 +621,17 @@ const Homepage = () => {
           <div className="contact-card">
             <div className="contact-icon">📍</div>
             <h3>Office Address:</h3>
-            <p>Winner's Chapel, Abuja.</p>
+            <p>3 Kumasi Crescent, Wuse 2, Abuja.</p>
           </div>
           <div className="contact-card">
             <div className="contact-icon">✉️</div>
             <h3>E-mail Address:</h3>
-            <p>Geodnainternetservices@gmail.com</p>
+            <p>info@vtvend.com</p>
           </div>
           <div className="contact-card">
             <div className="contact-icon">📞</div>
             <h3>Phone Number:</h3>
-            <p>Call: +234 704 809 4736</p>
+            <p>Call: +234 813 843 2055</p>
           </div>
         </div>
       </section>
@@ -599,11 +640,11 @@ const Homepage = () => {
       <footer className="footer">
         <div className="footer-grid">
           <div className="footer-section">
-            <h3>GEODNATECH</h3>
+            <h3>VTVend</h3>
             <p>
-              GEODNATECH is a company of GEODNATECH Nigeria Limited. We offer
-              best deals when it comes to internet Data Plans, Airtime, Bills
-              payment like GOTV, DSTV & STARTIMES.
+              VTVend is a company of VTVend Nigeria Limited. We offer best deals
+              when it comes to internet Data Plans, Airtime, Bills payment like
+              GOTV, DSTV & STARTIMES.
             </p>
           </div>
           <div className="footer-section">
@@ -634,7 +675,7 @@ const Homepage = () => {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>GEODNATECH Copyright © 2021 All Rights Reserved</p>
+          <p>VTVend Copyright © 2025 All Rights Reserved</p>
         </div>
       </footer>
     </div>
