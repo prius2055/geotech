@@ -11,6 +11,9 @@ const networkOrder = {
   "9MOBILE": 4,
 };
 
+// const BASE_URL = `http://localhost:5000/api/v1`;
+const BASE_URL = `https://vtu-backend-wjn6.onrender.com/api/v1`;
+
 const ServiceManagement = () => {
   const [dataPlans, setDataPlans] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,10 +32,7 @@ const ServiceManagement = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://localhost:5000/api/v1/admin/data", {
-        // const response = await fetch(
-        //   "https://vtu-backend-wjn6.onrender.com/api/v1/vtu/data-plans",
-        //   {
+      const response = await fetch(`${BASE_URL}/admin/data`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

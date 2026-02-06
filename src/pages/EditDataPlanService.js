@@ -21,6 +21,9 @@ const EditDataPlanService = () => {
     status: "",
   });
 
+  // const BASE_URL = `http://localhost:5000/api/v1`;
+  const BASE_URL = `https://vtu-backend-wjn6.onrender.com/api/v1`;
+
   useEffect(() => {
     const fetchServices = async () => {
       const token = localStorage.getItem("token");
@@ -28,15 +31,12 @@ const EditDataPlanService = () => {
       setError(null);
 
       try {
-        const response = await fetch(
-          "http://localhost:5000/api/v1/admin/data",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await fetch(`${BASE_URL}/admin/data`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
 
         const result = await response.json();
 
@@ -66,7 +66,7 @@ const EditDataPlanService = () => {
     };
 
     fetchServices();
-  }, [id]);
+  }, [id, BASE_URL]);
 
   useEffect(() => {
     if (planToEdit) {
@@ -76,40 +76,6 @@ const EditDataPlanService = () => {
       });
     }
   }, [planToEdit]);
-
-  // useEffect(() => {
-  //   const fetchService = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const token = localStorage.getItem("token");
-
-  //       const response = await axios.get(
-  //         `${import.meta.env.VITE_API_URL}/api/services/${id}`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-
-  //       setFormData({
-  //         name: response.data.data.name || "",
-  //         description: response.data.data.description || "",
-  //         price: response.data.data.price || "",
-  //         category: response.data.data.category || "",
-  //         status: response.data.data.status || "active",
-  //       });
-
-  //       setLoading(false);
-  //     } catch (err) {
-  //       console.error("Error fetching service:", err);
-  //       setError(err.response?.data?.message || "Failed to load service");
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchService();
-  // }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -134,20 +100,14 @@ const EditDataPlanService = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/v1/admin/data/${id}`,
-        {
-          // const response = await fetch(
-          //   "https://vtu-backend-wjn6.onrender.com/api/v1/vtu/data-plans",
-          //   {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
+      const response = await fetch(`${BASE_URL}/admin/data/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify(payload),
+      });
       const result = await response.json();
 
       console.log(result);
@@ -163,14 +123,6 @@ const EditDataPlanService = () => {
       setSaving(false);
     }
   };
-
-  // if (!planToEdit) {
-  //   return (
-  //     <div className="loading-container">
-  //       <div className="spinner"></div>
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="edit-container">

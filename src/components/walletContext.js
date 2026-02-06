@@ -5,8 +5,9 @@ import {
   useMemo,
   useRef,
   useCallback,
+  useEffect,
 } from "react";
-import { useEffect } from "react";
+
 const WalletContext = createContext();
 
 // const BASE_URL = `http://localhost:5000/api/v1`;
@@ -146,10 +147,8 @@ export const WalletProvider = ({ children }) => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/v1/wallet/verify?reference=${reference}`,
+        `${BASE_URL}/wallet/verify?reference=${reference}`,
         {
-          // `https://vtu-backend-wjn6.onrender.com/api/v1/wallet/verify?reference=${reference}`,
-          // {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
