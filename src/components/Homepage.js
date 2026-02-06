@@ -8,7 +8,7 @@ import Mojeed from "../img/mojeed.jpg";
 import Tenny from "../img/tenny.jpg";
 import IT from "../img/IT.jpg";
 
-import "./Homepage2.css";
+import "./Homepage.css";
 
 const Homepage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -389,15 +389,13 @@ const Homepage = () => {
           <div className="title-underline small"></div>
           <p className="section-description">We Provide The Best Services.</p>
         </div>
-        <div className="container services-grid">
+        <div className="services-grid">
           {services.map((s, i) => (
             <div key={i} className="service-card">
-              <div className="service-header">
-                <div className="service-icon">{s.icon}</div>
-                <div>
-                  <h3>{s.title}</h3>
-                  <p>{s.desc}</p>
-                </div>
+              <div className="service-icon">{s.icon}</div>
+              <div>
+                <h3>{s.title}</h3>
+                <p>{s.desc}</p>
               </div>
             </div>
           ))}
