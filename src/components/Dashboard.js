@@ -71,11 +71,39 @@ const Dashboard = () => {
 
   const serviceCards = [
     { icon: "📱", title: "Data card Printing", color: "#f59e42" },
-    { icon: "💳", title: "Airtime TopUp", color: "#3b9fd8" },
-    { icon: "📶", title: "Buy Data", color: "#6ca843" },
+    {
+      icon: "💳",
+      title: "Airtime TopUp",
+      color: "#3b9fd8",
+      page: () => {
+        navigate("/buy-airtime");
+      },
+    },
+    {
+      icon: "📶",
+      title: "Buy Data",
+      color: "#6ca843",
+      page: () => {
+        navigate("/buy-data");
+      },
+    },
     { icon: "💰", title: "Airtime to cash", color: "#2d6f3f" },
-    { icon: "💡", title: "Electricity Bills", color: "#f59e42" },
-    { icon: "📺", title: "Cable Subscription", color: "#5c7cfa" },
+    {
+      icon: "💡",
+      title: "Electricity Bills",
+      color: "#f59e42",
+      page: () => {
+        navigate("/utilities/recharge-meter");
+      },
+    },
+    {
+      icon: "📺",
+      title: "Cable Subscription",
+      color: "#5c7cfa",
+      page: () => {
+        navigate("/utilities/recharge-cable");
+      },
+    },
     { icon: "💳", title: "Bonus to wallet", color: "#3b9fd8" },
     { icon: "📚", title: "Result Checker", color: "#2d5f8f" },
     { icon: "🎫", title: "Recharge card Printing", color: "#888" },
@@ -377,7 +405,7 @@ const Dashboard = () => {
           </div>
           <div className="services-grid">
             {serviceCards.map((service, index) => (
-              <div key={index} className="service-card">
+              <div key={index} className="service-card" onClick={service.page}>
                 <div
                   className="service-icon"
                   style={{ background: service.color }}

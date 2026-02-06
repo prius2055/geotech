@@ -10,9 +10,7 @@ import {
   Settings,
   Code,
   Menu,
-  ChevronDown,
   Monitor,
-  Zap,
   MonitorCog,
   ArrowRightLeft,
   Signal,
@@ -26,7 +24,6 @@ import "./Dashboard.css";
 
 const SideBar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [showUtilities, setShowUtilities] = useState(false);
 
   const navigate = useNavigate();
 
@@ -82,7 +79,17 @@ const SideBar = () => {
           <span>Buy Airtime</span>
         </NavLink>
 
-        <div className="utilities">
+        <NavLink className="nav-item" to="/utilities/recharge-meter">
+          <Lightbulb size={20} />
+          <span>Energy Meter Recharge</span>
+        </NavLink>
+
+        <NavLink className="nav-item" to="/utilities/recharge-cable">
+          <Monitor size={18} />
+          <span>Cable Subscription</span>
+        </NavLink>
+
+        {/* <div className="utilities">
           <div
             className="nav-item"
             onClick={() => setShowUtilities((prev) => !prev)}
@@ -106,7 +113,7 @@ const SideBar = () => {
               </NavLink>
             </div>
           )}
-        </div>
+        </div> */}
 
         <NavLink to="/funding" className="nav-item">
           <Wallet size={20} />
