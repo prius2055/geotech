@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import SideBar from "../SideBar";
-import Header from "../Header";
-import { useWallet } from "../walletContext";
-import { capitalize } from "../../utils/helperFunctions";
+import SideBar from "./SideBar";
+import Header from "./Header";
+import { useWallet } from "./walletContext";
+import { capitalize } from "../utils/helperFunctions";
 
-import "../BuyData.css";
+import "./BuyData.css";
 
 const DISCO_NAME_MAP = {
   "ikeja-electric": 1,

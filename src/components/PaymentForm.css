@@ -1,17 +1,17 @@
 /* Wallet Container */
 .funding-container {
- display: flex;
+  display: flex;
 }
 
-.funding{
- display: flex;
- flex-direction: column;
+.funding {
+  display: flex;
+  flex-direction: column;
   margin-left: 280px;
   width: calc(100% - 280px);
 }
 
 .wallet-container {
-  margin: 5rem 20rem;
+  margin: 5rem 10rem;
   padding: 30px 20px;
 }
 
@@ -301,9 +301,21 @@
 }
 
 /* Responsive */
+
+/* 992px and below (Tablets) */
+@media (max-width: 992px) {
+  .payment-balance-amount {
+    font-size: 40px;
+  }
+}
+
 @media (max-width: 768px) {
+  .funding {
+    margin-left: 0;
+    width: 100%;
+  }
   .wallet-container {
-    padding: 20px 15px;
+    margin: 5px 10px;
   }
 
   .balance-card {
@@ -336,4 +348,17 @@
   .transaction-amount {
     font-size: 16px;
   }
+}
+
+@media (max-width: 680px) {
+}
+
+/* 576px and below (Phones) */
+@media (max-width: 576px) {
+}
+
+@media (max-width: 480px) {
+}
+
+@media (max-width: 374px) {
 }

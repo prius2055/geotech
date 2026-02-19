@@ -85,7 +85,7 @@ const BuyAirtime = () => {
           <h2 className="popup-title">Buy Data Plan</h2>
 
           <form onSubmit={handleSubmit} className="popup-form">
-            <div className="form-row">
+            <div className="buy-data-form-row">
               {/* Left Column - Form */}
               <div className="form-column">
                 {error && <div className="form-error">{error}</div>}

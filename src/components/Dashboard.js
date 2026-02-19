@@ -8,7 +8,7 @@ import Header from "./Header";
 import UpgradeModal from "./UpgradeModal";
 import ServiceTable from "./ServiceTable";
 
-import "./Dashboard.css";
+import "./Dashboard2.css";
 
 const Dashboard = () => {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
@@ -175,19 +175,6 @@ const Dashboard = () => {
         </Link>
 
         <div className="content">
-          {/* <div className="announcement-banner">
-            <div className="announcement-title">
-              KINDLY NOTE THAT THERE ARE ALWAYS UPDATE IN PRICES BY VARIOUS
-              NETWORK PROVIDERS. WE WILL BRING YOU THE LATEST PRICES AS THEY GET
-              UPDATED. THANK YOU
-              <h4>Welcome Onboard!</h4>
-              <p>
-                Refer people and earn ₦500 immediately the person upgrade
-                his/her account to affiliate or Reseller
-              </p>
-            </div>
-          </div> */}
-
           <div className="greeting-section">
             <div className="package-title">
               Package:
@@ -405,7 +392,11 @@ const Dashboard = () => {
           </div>
           <div className="services-grid">
             {serviceCards.map((service, index) => (
-              <div key={index} className="service-card" onClick={service.page}>
+              <div
+                key={index}
+                className="dashboard-service-card"
+                onClick={service.page}
+              >
                 <div
                   className="service-icon"
                   style={{ background: service.color }}

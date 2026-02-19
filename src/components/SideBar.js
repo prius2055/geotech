@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Home,
   BarChart2,
@@ -9,7 +9,6 @@ import {
   UserPlus,
   Settings,
   Code,
-  Menu,
   Monitor,
   MonitorCog,
   ArrowRightLeft,
@@ -17,18 +16,22 @@ import {
 } from "lucide-react";
 import { useWallet } from "./walletContext";
 import { useAuth } from "./authContext";
+import { useMenu } from "./MenuContext";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { formatCurrency } from "../utils/helperFunctions";
 
-import "./Dashboard.css";
+import "./Dashboard2.css";
 
 const SideBar = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { user } = useAuth();
+  const { balance } = useWallet();
+  const { mobileMenu, toggleMobileMenu } = useMenu();
 
   const navigate = useNavigate();
 
-  const { user } = useAuth();
-  const { balance } = useWallet();
+  const closeMobileMenu = () => {
+    if (mobileMenu) toggleMobileMenu();
+  };
 
   const { username, role, referralCode } = user ?? {};
 
@@ -37,19 +40,21 @@ const SideBar = () => {
   const safeReferralCode = referralCode ?? null;
 
   return (
-    <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+    <div className={`sidebar ${mobileMenu ? "open" : ""}`}>
       <div className="sidebar-header">
         <h2>
           <Link to="/" className="home-btn">
             Home
           </Link>
         </h2>
-        <button
-          className="menu-toggle"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
+
+        <div
+          className="mobile-menu-toggle"
+          onClick={closeMobileMenu}
+          aria-label="Close menu"
         >
-          <Menu size={24} />
-        </button>
+          ✕
+        </div>
       </div>
 
       <div className="user-info">
@@ -64,7 +69,7 @@ const SideBar = () => {
         <div className="user-balance">Referral Code: {safeReferralCode}</div>
       </div>
 
-      <nav className="nav-menu">
+      <nav className="nav-menu" onClick={closeMobileMenu}>
         <NavLink className={`nav-item`} to="/dashboard">
           <Home size={20} />
           <span>Dashboard</span>

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import SideBar from "../SideBar";
-import Header from "../Header";
-import { useWallet } from "../walletContext";
+import SideBar from "./SideBar";
+import Header from "./Header";
+import { useWallet } from "./walletContext";
 
-import "../BuyData.css";
+import "./BuyData.css";
 
 const CABLE_PLAN_MAP = {
   34: "GOtv Smallie - Monthly= N1900",

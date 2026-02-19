@@ -762,11 +762,11 @@
 /* Responsive */
 @media (max-width: 1024px) {
   .services-table-container {
-    overflow-x: auto;
+    /* overflow-x: auto; */
   }
 
   .services-table {
-    min-width: 1000px;
+    /* min-width: 1000px; */
   }
 }
 
