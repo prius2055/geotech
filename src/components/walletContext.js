@@ -104,7 +104,7 @@ export const WalletProvider = ({ children }) => {
       // console.error("Error fetching data plans:", error);
       setError("Failed to fetch data plans");
     }
-  }, [token, networkOrder]);
+  }, [networkOrder]);
 
   const fundWallet = async (amount) => {
     try {
