@@ -25,6 +25,8 @@ const Dashboard = () => {
     upgradeToReseller,
   } = useWallet();
 
+  console.log(totalSpent);
+
   const navigate = useNavigate();
 
   const { referralEarnings, referralsCount } = user;
@@ -286,11 +288,14 @@ const Dashboard = () => {
                       </svg>
                       Upgrade to Reseller Now
                     </span>
-                    <span className="button-shine"></span>
+                    {/* <span className="button-shine"></span> */}
+                    <p className="cta-subtext">
+                      Only ₦1,000 one-time fee • Instant activation
+                    </p>
                   </button>
-                  <p className="cta-subtext">
+                  {/* <p className="cta-subtext">
                     Only ₦1,000 one-time fee • Instant activation
-                  </p>
+                  </p> */}
                 </div>
               </div>
 

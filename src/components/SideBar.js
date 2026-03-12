@@ -22,12 +22,17 @@ import { formatCurrency } from "../utils/helperFunctions";
 
 import "./Dashboard2.css";
 
-const SideBar = () => {
+const SideBar = ({ marketerWalletBalance }) => {
   const { user } = useAuth();
-  const { balance } = useWallet();
+  const { balance: userWalletBalance } = useWallet();
   const { mobileMenu, toggleMobileMenu } = useMenu();
 
   const navigate = useNavigate();
+
+  const displayedBalance =
+    marketerWalletBalance !== undefined
+      ? marketerWalletBalance
+      : userWalletBalance;
 
   const closeMobileMenu = () => {
     if (mobileMenu) toggleMobileMenu();
@@ -64,16 +69,23 @@ const SideBar = () => {
 
         <div className="user-name">Hello, {safeUsername}</div>
         <div className="user-balance">
-          Balance: {balance !== null ? formatCurrency(balance) : "Loading..."}
+          Balance:
+          {displayedBalance !== null
+            ? formatCurrency(displayedBalance)
+            : "Loading..."}
         </div>
         <div className="user-balance">Referral Code: {safeReferralCode}</div>
       </div>
 
       <nav className="nav-menu" onClick={closeMobileMenu}>
-        <NavLink className={`nav-item`} to="/dashboard">
+        <NavLink
+          className={`nav-item`}
+          to={safeRole === "marketer" ? "/marketer" : "/dashboard"}
+        >
           <Home size={20} />
           <span>Dashboard</span>
         </NavLink>
+
         <NavLink className="nav-item" to="/buy-data">
           <BarChart2 size={20} />
           <span>Buy Data</span>
@@ -93,37 +105,12 @@ const SideBar = () => {
           <Monitor size={18} />
           <span>Cable Subscription</span>
         </NavLink>
-
-        {/* <div className="utilities">
-          <div
-            className="nav-item"
-            onClick={() => setShowUtilities((prev) => !prev)}
-          >
-            <Lightbulb size={20} />
-            <span>Utilities Payment</span>
-            <ChevronDown
-              size={20}
-              className={`nav-item-utils ${showUtilities ? "open" : ""}`}
-            />
-          </div>
-          {showUtilities && (
-            <div className="nav-children">
-              <NavLink className="nav-child" to="/utilities/recharge-meter">
-                <Zap size={18} />
-                <span>Energy Meter Recharge</span>
-              </NavLink>
-              <NavLink className="nav-child" to="/utilities/recharge-cable">
-                <Monitor size={18} />
-                <span>Cable Subscription</span>
-              </NavLink>
-            </div>
-          )}
-        </div> */}
-
-        <NavLink to="/funding" className="nav-item">
-          <Wallet size={20} />
-          <span>Fund Wallet</span>
-        </NavLink>
+        {safeRole !== "marketer" && (
+          <NavLink to="/funding" className="nav-item">
+            <Wallet size={20} />
+            <span>Fund Wallet</span>
+          </NavLink>
+        )}
         <div className="nav-item">
           <DollarSign size={20} />
           <span>Pricing</span>
@@ -136,29 +123,33 @@ const SideBar = () => {
           <Settings size={20} />
           <span>Change Pin</span>
         </div>
-        <div className="nav-item">
-          <Settings size={20} />
-          <span>Setting</span>
-        </div>
+
+        {safeRole !== "marketer" && (
+          <div className="nav-item">
+            <Settings size={20} />
+            <span>Setting</span>
+          </div>
+        )}
+
         <div className="nav-item">
           <Code size={20} />
           <span>Developer's API</span>
         </div>
 
-        {safeRole === "admin" && (
+        {safeRole === "marketer" && (
           <div className="admin-nav">
             <div className="admin-nav-header">
               <MonitorCog size={20} />
-              <h3>Admin</h3>
+              <h3>Marketer</h3>
             </div>
 
             <div className="admin-nav-links">
-              <NavLink to="/admin/data" className="nav-item">
+              <NavLink to="/marketer/data" className="nav-item">
                 <Signal size={20} />
                 <span>Edit Price</span>
               </NavLink>
 
-              <NavLink to="/admin/transactions" className="nav-item">
+              <NavLink to="/marketer/transactions" className="nav-item">
                 <ArrowRightLeft size={20} />
                 <span>Transactions</span>
               </NavLink>

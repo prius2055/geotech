@@ -7,10 +7,11 @@ import {
   useCallback,
   useEffect,
 } from "react";
+import { BASE_URL, getHeaders } from "../api/api";
 
 const WalletContext = createContext();
 
-const BASE_URL = `http://localhost:5000/api/v1`;
+// const BASE_URL = `http://localhost:5000/api/v1`;
 // const BASE_URL = `https://vtu-backend-wjn6.onrender.com/api/v1`;
 
 export const WalletProvider = ({ children }) => {
@@ -46,10 +47,7 @@ export const WalletProvider = ({ children }) => {
       // console.log("🔵 Checking authentication...");
 
       const response = await fetch(`${BASE_URL}/wallet/get`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+        headers: getHeaders(),
       });
 
       const data = await response.json();
@@ -69,15 +67,13 @@ export const WalletProvider = ({ children }) => {
   }, [token]);
 
   const fetchDataPlans = useCallback(async () => {
+    console.log("🔵 Fetching from:", `${BASE_URL}/vtu/data-plans`); // ← add this
     setLoading(true);
     setError(null);
     try {
       const response = await fetch(`${BASE_URL}/vtu/data-plans`, {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: getHeaders(),
       });
       const data = await response.json();
 
@@ -116,10 +112,7 @@ export const WalletProvider = ({ children }) => {
 
       const res = await fetch(`${BASE_URL}/wallet/fund`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: getHeaders(),
         body: JSON.stringify({ amount }),
       });
 
@@ -148,13 +141,7 @@ export const WalletProvider = ({ children }) => {
     try {
       const res = await fetch(
         `${BASE_URL}/wallet/verify?reference=${reference}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        { headers: getHeaders() },
       );
 
       const data = await res.json();
@@ -188,10 +175,7 @@ export const WalletProvider = ({ children }) => {
     try {
       const res = await fetch(`${BASE_URL}/vtu/buy-data`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: getHeaders(),
         body: JSON.stringify(payload),
       });
 
@@ -236,10 +220,7 @@ export const WalletProvider = ({ children }) => {
     try {
       const res = await fetch(`${BASE_URL}/vtu/buy-airtime`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: getHeaders(),
         body: JSON.stringify(payload),
       });
       const data = await res.json();
@@ -464,10 +445,7 @@ export const WalletProvider = ({ children }) => {
 
       const response = await fetch(`${BASE_URL}/wallet/upgrade`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: getHeaders(),
       });
 
       const data = await response.json();

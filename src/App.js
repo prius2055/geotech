@@ -8,7 +8,7 @@ import Homepage from "./components/Homepage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProtectedRoutes from "./components/ProtectedRoutes";
-import AdminRoute from "./components/AdminRoute";
+import MarketerRoutes from "./components/MarketerRoutes";
 import Confirmation from "./pages/Confirmation";
 import PaymentForm from "./components/PaymentForm";
 import VerifyFunding from "./components/VerifyFunding";
@@ -24,6 +24,8 @@ import UserTransactions from "./pages/UserTransactions";
 import ResetPassword from "./pages/ResetPassword";
 import UserProfile from "./pages/Profile";
 import RequestPasswordReset from "./pages/RequestPasswordRequest";
+import Epins from "./components/Epins";
+import MarketerDashboard from "./components/MarketerDashboard";
 
 import "./App.css";
 
@@ -48,7 +50,7 @@ function App() {
                   path="/password/reset/:token"
                   element={<ResetPassword />}
                 />
-
+                <Route path="/epins" element={<Epins />} />
                 {/* Protected Routes */}
                 <Route element={<ProtectedRoutes />}>
                   <Route path="/dashboard" element={<Dashboard />} />
@@ -69,29 +71,38 @@ function App() {
                   <Route path="/transactions" element={<UserTransactions />} />
                   <Route path="/profile" element={<UserProfile />} />
 
-                  {/* Admin-only Route */}
+                  {/* Marketer-only Route */}
                   <Route
-                    path="/admin/data"
+                    path="/marketer"
                     element={
-                      <AdminRoute>
+                      <MarketerRoutes>
+                        <MarketerDashboard />
+                      </MarketerRoutes>
+                    }
+                  />
+                  <Route
+                    path="/marketer/data"
+                    element={
+                      <MarketerRoutes>
                         <ServiceManagement />
-                      </AdminRoute>
+                      </MarketerRoutes>
                     }
                   />
                   <Route
-                    path="/admin/data/:id/edit"
+                    path="/marketer/data/:id/edit"
                     element={
-                      <AdminRoute>
+                      <MarketerRoutes>
                         <EditDataPlanService />
-                      </AdminRoute>
+                      </MarketerRoutes>
                     }
                   />
+
                   <Route
-                    path="/admin/transactions"
+                    path="/marketer/transactions"
                     element={
-                      <AdminRoute>
+                      <MarketerRoutes>
                         <TransactionService />
-                      </AdminRoute>
+                      </MarketerRoutes>
                     }
                   />
                 </Route>

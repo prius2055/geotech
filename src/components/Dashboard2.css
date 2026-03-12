@@ -201,15 +201,15 @@
 
 /* CTA Subtext */
 .cta-subtext {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.9);
-  margin: 0;
+  font-size: 0.75rem;
+  color: #7668c2;
+  margin: 0.5rem 0 0 0;
   font-weight: 500;
 }
 
 .cta-subtext::before {
   content: "✓ ";
-  color: #10b981;
+  color: #7668c2;
   font-weight: 700;
 }
 
@@ -1484,8 +1484,6 @@ body {
   }
 }
 
-
-
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
   .greeting-section {
@@ -1502,4 +1500,55 @@ body {
   }
 }
 
+/* ── Logout Overlay ── */
+.logout-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8eef3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-out;
+}
 
+.logout-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  border-radius: 16px;
+  padding: 2.5rem 3rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.4s ease-out;
+}
+
+.logout-spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.logout-message {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.logout-sub {
+  font-size: 0.9375rem;
+  color: #64748b;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

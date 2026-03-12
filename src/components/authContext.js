@@ -1,14 +1,17 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL, getHeaders } from "../api/api";
+
 const AuthContext = createContext();
 
-const BASE_URL = `http://localhost:5000/api/v1`;
+// const BASE_URL = `http://localhost:5000/api/v1`;
 
 // const BASE_URL = `https://vtu-backend-wjn6.onrender.com/api/v1`;
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const navigate = useNavigate();
 
@@ -58,9 +61,7 @@ export const AuthProvider = ({ children }) => {
 
       const response = await fetch(`${BASE_URL}/register`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getHeaders(false), // false = no auth (public route)
         body: JSON.stringify(userData),
       });
 
@@ -182,21 +183,19 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     console.log("🔵 Logging out...");
+    setLoggingOut(true); // ✅ trigger overlay
 
-    try {
-      // Clear auth storage
-      localStorage.removeItem("token");
-
-      // Reset auth state
-      setUser(null);
-
-      console.log("✅ Logout successful");
-    } catch (error) {
-      console.error("❌ Logout error:", error);
-    } finally {
-      // Always redirect
-      navigate("/", { replace: true });
-    }
+    setTimeout(() => {
+      try {
+        localStorage.removeItem("token");
+        setUser(null);
+        console.log("✅ Logout successful");
+      } catch (error) {
+        console.error("❌ Logout error:", error);
+      } finally {
+        navigate("/", { replace: true });
+      }
+    }, 1500); // ✅ let animation play before clearing state
   };
 
   const isAuthenticated = () => {
@@ -212,6 +211,7 @@ export const AuthProvider = ({ children }) => {
         resetPassword,
         requestPasswordReset,
         logout,
+        loggingOut,
         isAuthenticated,
         loading,
       }}
